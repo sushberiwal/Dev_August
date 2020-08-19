@@ -29,12 +29,12 @@ function parseData(data){
     let allMatchesCards = ch(".col-md-8.col-16");
     for(let i=0 ; i<allMatchesCards.length ; i++){
         let matchLink = ch(allMatchesCards[i]).find(".match-cta-container a[data-hover='Scorecard']").attr("href");  
-        console.log("###########################");
         let completeMatchLink = "https://www.espncricinfo.com"+matchLink; 
-        console.log(completeMatchLink);
-        console.log("###########################");
+        // console.log(completeMatchLink);
+        // console.log("###########################");
+        
     }
-    
+
 }
 
 
