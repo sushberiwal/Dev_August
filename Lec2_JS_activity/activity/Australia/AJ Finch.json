@@ -1,0 +1,16 @@
+[
+  { "runs": "14", "balls": "7", "fours": "1", "sixes": "1", "SR": "200.00" },
+  { "runs": "0", "balls": "5", "fours": "0", "sixes": "0", "SR": "0.00" },
+  { "runs": "2", "balls": "5", "fours": "0", "sixes": "0", "SR": "40.00" },
+  { "runs": "24", "balls": "24", "fours": "3", "sixes": "0", "SR": "100.00" },
+  { "runs": "81", "balls": "116", "fours": "7", "sixes": "1", "SR": "69.82" },
+  {
+    "runs": "135",
+    "balls": "128",
+    "fours": "12",
+    "sixes": "3",
+    "SR": "105.46"
+  },
+  { "runs": "4", "balls": "9", "fours": "0", "sixes": "0", "SR": "44.44" },
+  { "runs": "20", "balls": "10", "fours": "3", "sixes": "1", "SR": "200.00" }
+]

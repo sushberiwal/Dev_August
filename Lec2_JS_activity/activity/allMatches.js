@@ -1,6 +1,7 @@
 let request = require("request");
 let fs = require("fs");
 let cheerio = require("cheerio");
+const findDetails = require("./match");
 
 function allMatches(link) {
   request(link, cb);
@@ -30,11 +31,9 @@ function parseData(data){
     for(let i=0 ; i<allMatchesCards.length ; i++){
         let matchLink = ch(allMatchesCards[i]).find(".match-cta-container a[data-hover='Scorecard']").attr("href");  
         let completeMatchLink = "https://www.espncricinfo.com"+matchLink; 
-        // console.log(completeMatchLink);
-        // console.log("###########################");
-        
+        findDetails(completeMatchLink);
+        // console.log("#################################");
     }
-
 }
 
 
