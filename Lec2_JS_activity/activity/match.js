@@ -32,7 +32,7 @@ let bothInnings = ch(".card.content-block.match-scorecard-table .Collapsible");
 for(let i=0 ; i<bothInnings.length ; i++){
     let teamName = ch(bothInnings[i]).find(".header-title.label").text();
     teamName = teamName.split("Innings")[0].trim();
-    console.log(teamName);
+    // console.log(teamName);
     let allRows = ch(bothInnings[i]).find(".table.batsman tbody tr");
     for(let j=0 ; j<allRows.length ; j++){
 
@@ -45,10 +45,11 @@ for(let i=0 ; i<bothInnings.length ; i++){
             let fours = ch(allCols[5]).text().trim();
             let sixes = ch(allCols[6]).text().trim();
             let strikeRate = ch(allCols[7]).text().trim();
-
+            
             // console.log( `Batsman-> ${batsmanName} Runs-> ${runs} balls-> ${balls} fours-> ${fours} sixes-> ${sixes} SR-> ${strikeRate}`);
+            if(batsmanName)
             processDetails(teamName , batsmanName , runs , balls , fours , sixes , strikeRate);
-            console.log("------------------------------------------------------");
+            // console.log("------------------------------------------------------");
         }
     }
 }
