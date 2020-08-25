@@ -53,7 +53,26 @@ pageOpenPromise.then(function(){
       let ipClickedPromise = ipElement.click();
       return ipClickedPromise;
   }).then(function(){
-      console.log("Reached IP Page");
+     let warmupFindP = driver.findElement(swd.By.css('a[data-attr1="warmup"]'));
+     return warmupFindP;
+  }).then(function(warmupElement){
+      let warmupCLickedP = warmupElement.click();
+      return warmupCLickedP;
+  }).then(function(){
+      let allQPromise = driver.findElements(swd.By.css(".js-track-click.challenge-list-item"));
+      return allQPromise;
+  }).then(function(allQues){
+
+    let allQuesHrefPromise = [];
+    for(let i=0 ; i<allQues.length ; i++){
+       let quesLinkPromise =  allQues[i].getAttribute("href");
+       allQuesHrefPromise.push(quesLinkPromise);
+    }
+    let allQuesP = Promise.all(allQuesHrefPromise);
+    return allQuesP;  
+  
+}).then(function(allHrefs){
+      console.log(allHrefs);
   })
   .catch(function (err) {
     console.log(err);
