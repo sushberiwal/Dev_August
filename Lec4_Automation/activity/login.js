@@ -9,6 +9,10 @@ require("chromedriver");
 let swd = require("selenium-webdriver");
 const { id, pw } = require("./credentials");
 
+let gCodes;
+
+let gCode;
+let gCustomTextBox;
 // build browser
 let bldr = new swd.Builder();
 //create new tab
@@ -27,15 +31,15 @@ pageOpenPromise
     console.log("page opened");
     let idPromise = driver.findElement(swd.By.css("#input-1"));
     let pwPromise = driver.findElement(swd.By.css("#input-2"));
-    let idPwPromise = Promise.all( [ idPromise , pwPromise]   );
+    let idPwPromise = Promise.all([idPromise, pwPromise]);
     return idPwPromise;
   })
   //type email && type pw
   .then(function (LoginElementsArr) {
-       let idTypedPromise = LoginElementsArr[0].sendKeys(id);
-       let pwTypedPromise = LoginElementsArr[1].sendKeys(pw);
-       let idPwTypedPromise = Promise.all(  [idTypedPromise , pwTypedPromise] ); 
-       return idPwTypedPromise;
+    let idTypedPromise = LoginElementsArr[0].sendKeys(id);
+    let pwTypedPromise = LoginElementsArr[1].sendKeys(pw);
+    let idPwTypedPromise = Promise.all([idTypedPromise, pwTypedPromise]);
+    return idPwTypedPromise;
   })
   .then(function () {
     let clickedPromise = navigatorFn("button.auth-button");
@@ -65,7 +69,12 @@ pageOpenPromise
     return allQuesP;
   })
   .then(function (allHrefs) {
-    console.log(allHrefs);
+    //all questions links
+    let quesSubmitPromise = questionSubmitter(allHrefs[1]);
+    return quesSubmitPromise;
+  })
+  .then(function () {
+    console.log("Question submitted successfully !");
   })
   .catch(function (err) {
     console.log(err);
@@ -76,7 +85,7 @@ function navigatorFn(selector) {
   let promise = new Promise(function (resolve, reject) {
     let elementFindPromise = driver.findElement(swd.By.css(selector));
     elementFindPromise
-      .then(function(element) {
+      .then(function (element) {
         let clickPromise = element.click();
         return clickPromise;
       })
@@ -89,4 +98,129 @@ function navigatorFn(selector) {
   });
 
   return promise;
+}
+
+function handleLockButton() {
+  return new Promise(function (resolve, reject) {
+    let findElementPromise = driver.findElement(
+      swd.By.css(".ui-btn.ui-btn-normal.ui-btn-primary")
+    );
+    findElementPromise
+      .then(function (element) {
+        let elmClickedPromise = element.click();
+        return elmClickedPromise;
+      })
+      .then(function () {
+        console.log("Lock btn clicked");
+        resolve();
+      })
+      .catch(function (error) {
+        console.log("Lock btn not found !!");
+        resolve();
+      });
+  });
+}
+
+function pasteCode() { 
+  return new Promise(function (resolve, reject) {
+    let problemClickedP = navigatorFn('a[data-attr2="Problem"]');
+    problemClickedP
+      .then(function () {
+        let customClickedPromise = navigatorFn(".custom-input-checkbox");
+        return customClickedPromise;
+      })
+      .then(function () {
+        let customInputP = driver.findElement(swd.By.css(".custominput"));
+        return customInputP;
+      }).then(function(element){
+        gCustomTextBox = element;
+        let codeTypedPromise = element.sendKeys(gCode);
+        return codeTypedPromise; 
+      }).then(function(){
+        let ctrlAPromise = gCustomTextBox.sendKeys(swd.Key.CONTROL + "a");
+        return ctrlAPromise; 
+      }).then(function(){
+        let ctrlCPromise = gCustomTextBox.sendKeys(swd.Key.CONTROL + "c");
+        return ctrlCPromise; 
+      }).then(function(){
+         let elementP = driver.findElement(swd.By.css(".view-line"));
+         return elementP;
+      })
+      .then(function(element){
+        let ctrlAPromise = element.sendKeys(swd.Key.CONTROL + "a");
+        return ctrlAPromise;
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+  });
+}
+
+function getCode() {
+  return new Promise(function (resolve, reject) {
+    // => get array of codes heading ["c++" , "pyhton","swift"];
+    let codeNamesPromise = driver.findElements(
+      swd.By.css(".hackdown-content h3")
+    );
+    // => get array of codes[ "code of c++" , "code of python", "code of swift"];
+    let codePromise = driver.findElements(
+      swd.By.css(".hackdown-content .highlight")
+    );
+    // =>  [       ["c++" , "pyhton","swift"] ,   [ "code of c++" , "code of python", "code of swift"]    ];
+    let codesArrayPromise = Promise.all([codeNamesPromise, codePromise]);
+    codesArrayPromise
+      .then(function (codesElements) {
+        let namesOfCodes = codesElements[0];
+        gCodes = codesElements[1];
+
+        let codeNamesPromise = [];
+
+        for (let i = 0; i < namesOfCodes.length; i++) {
+          let pP = namesOfCodes[i].getText();
+          codeNamesPromise.push(pP);
+        }
+        let pendingPromise = Promise.all(codeNamesPromise);
+        return pendingPromise;
+      })
+      .then(function (codeElementsName) {
+        let codesName = codeElementsName;
+        let idx = codesName.indexOf("C++");
+        let codePromise = gCodes[idx].getText();
+        return codePromise;
+      })
+      .then(function (code) {
+        gCode = code;
+        resolve();
+      })
+      .catch(function (err) {
+        reject(err);
+      });
+  });
+}
+
+function questionSubmitter(quesLink) {
+  // console.log(quesLink);
+  return new Promise(function (resolve, reject) {
+    let quesClickedPromise = driver.get(quesLink);
+    quesClickedPromise
+      .then(function () {
+        let editorialClickedPromise = navigatorFn('a[data-attr2="Editorial"]');
+        return editorialClickedPromise;
+      })
+      .then(function () {
+        let lockBtnPromise = handleLockButton();
+        return lockBtnPromise;
+      })
+      .then(function () {
+        let getCodePromise = getCode();
+        return getCodePromise;
+      })
+      .then(function () {
+        let pasteCodePromise = pasteCode();
+        return pasteCodePromise;
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  });
 }
