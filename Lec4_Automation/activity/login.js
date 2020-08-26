@@ -16,69 +16,77 @@ let driver = bldr.forBrowser("chrome").build();
 //open a page in that tab
 let pageOpenPromise = driver.get("https://www.hackerrank.com/auth/login");
 
-
 // promise chaining =>
-pageOpenPromise.then(function(){
-    let waitPromise = driver.manage().setTimeouts( { implicit: 5000 } );
+pageOpenPromise
+  .then(function () {
+    let waitPromise = driver.manage().setTimeouts({ implicit: 5000 });
     return waitPromise;
-})
-.then(function () {
+  })
+  // find email input && find pw input
+  .then(function () {
     console.log("page opened");
     let idPromise = driver.findElement(swd.By.css("#input-1"));
-    return idPromise;
+    let pwPromise = driver.findElement(swd.By.css("#input-2"));
+    let idPwPromise = Promise.all( [ idPromise , pwPromise]   );
+    return idPwPromise;
   })
-  .then(function (idElement) {
-    let idEnteredPromise = idElement.sendKeys(id);
-    return idEnteredPromise;
+  //type email && type pw
+  .then(function (LoginElementsArr) {
+       let idTypedPromise = LoginElementsArr[0].sendKeys(id);
+       let pwTypedPromise = LoginElementsArr[1].sendKeys(pw);
+       let idPwTypedPromise = Promise.all(  [idTypedPromise , pwTypedPromise] ); 
+       return idPwTypedPromise;
   })
   .then(function () {
-    let pwPromise = driver.findElement(swd.By.css("#input-2"));
-    return pwPromise;
+    let clickedPromise = navigatorFn("button.auth-button");
+    return clickedPromise;
   })
-  .then(function (pwElement) {
-    let pwEnteredPromise = pwElement.sendKeys(pw);
-    return pwEnteredPromise;
+  .then(function () {
+    let ipKitPromise = navigatorFn("#base-card-1-link");
+    return ipKitPromise;
   })
-  .then(function (){
-      let loginBtnPromise = driver.findElement(swd.By.css("button.auth-button"));
-      return loginBtnPromise;
+  .then(function () {
+    let warmupFindP = navigatorFn('a[data-attr1="warmup"]');
+    return warmupFindP;
   })
-  .then(function(loginBtn){
-      let loginClickedPromise = loginBtn.click();
-      return loginClickedPromise;
-  }).then(function(){
-      let ipKitPromise = driver.findElement(swd.By.css("#base-card-1-link"));
-      return ipKitPromise;
-  }).then(function(ipElement){
-      let ipClickedPromise = ipElement.click();
-      return ipClickedPromise;
-  }).then(function(){
-     let warmupFindP = driver.findElement(swd.By.css('a[data-attr1="warmup"]'));
-     return warmupFindP;
-  }).then(function(warmupElement){
-      let warmupCLickedP = warmupElement.click();
-      return warmupCLickedP;
-  }).then(function(){
-      let allQPromise = driver.findElements(swd.By.css(".js-track-click.challenge-list-item"));
-      return allQPromise;
-  }).then(function(allQues){
-
+  .then(function () {
+    let allQPromise = driver.findElements(
+      swd.By.css(".js-track-click.challenge-list-item")
+    );
+    return allQPromise;
+  })
+  .then(function (allQues) {
     let allQuesHrefPromise = [];
-    for(let i=0 ; i<allQues.length ; i++){
-       let quesLinkPromise =  allQues[i].getAttribute("href");
-       allQuesHrefPromise.push(quesLinkPromise);
+    for (let i = 0; i < allQues.length; i++) {
+      let quesLinkPromise = allQues[i].getAttribute("href");
+      allQuesHrefPromise.push(quesLinkPromise);
     }
     let allQuesP = Promise.all(allQuesHrefPromise);
-    return allQuesP;  
-  
-}).then(function(allHrefs){
-      console.log(allHrefs);
+    return allQuesP;
+  })
+  .then(function (allHrefs) {
+    console.log(allHrefs);
   })
   .catch(function (err) {
     console.log(err);
   });
 
+function navigatorFn(selector) {
+  console.log("Inside Navigator Function");
+  let promise = new Promise(function (resolve, reject) {
+    let elementFindPromise = driver.findElement(swd.By.css(selector));
+    elementFindPromise
+      .then(function(element) {
+        let clickPromise = element.click();
+        return clickPromise;
+      })
+      .then(function () {
+        resolve();
+      })
+      .catch(function () {
+        reject();
+      });
+  });
 
-
-
-  
+  return promise;
+}
