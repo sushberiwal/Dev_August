@@ -18,7 +18,6 @@ let bldr = new swd.Builder();
 let driver = bldr.forBrowser("chrome").build();
 //open a page in that tab
 let pageOpenPromise = driver.get("https://www.hackerrank.com/auth/login");
-
 // promise chaining =>
 pageOpenPromise
   .then(function () {
