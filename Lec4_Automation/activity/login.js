@@ -13,6 +13,7 @@ let gCodes;
 
 let gCode;
 let gCustomTextBox;
+let gCodeBox;
 // build browser
 let bldr = new swd.Builder();
 //create new tab
@@ -70,7 +71,7 @@ pageOpenPromise
   })
   .then(function (allHrefs) {
     //all questions links
-    let quesSubmitPromise = questionSubmitter(allHrefs[1]);
+    let quesSubmitPromise = questionSubmitter(allHrefs[0]);
     return quesSubmitPromise;
   })
   .then(function () {
@@ -121,7 +122,7 @@ function handleLockButton() {
   });
 }
 
-function pasteCode() { 
+function pasteCode() {
   return new Promise(function (resolve, reject) {
     let problemClickedP = navigatorFn('a[data-attr2="Problem"]');
     problemClickedP
@@ -132,27 +133,40 @@ function pasteCode() {
       .then(function () {
         let customInputP = driver.findElement(swd.By.css(".custominput"));
         return customInputP;
-      }).then(function(element){
+      })
+      .then(function (element) {
         gCustomTextBox = element;
         let codeTypedPromise = element.sendKeys(gCode);
-        return codeTypedPromise; 
-      }).then(function(){
-        let ctrlAPromise = gCustomTextBox.sendKeys(swd.Key.CONTROL + "a");
-        return ctrlAPromise; 
-      }).then(function(){
-        let ctrlCPromise = gCustomTextBox.sendKeys(swd.Key.CONTROL + "c");
-        return ctrlCPromise; 
-      }).then(function(){
-         let elementP = driver.findElement(swd.By.css(".view-line"));
-         return elementP;
+        return codeTypedPromise;
       })
-      .then(function(element){
-        let ctrlAPromise = element.sendKeys(swd.Key.CONTROL + "a");
+      .then(function () {
+        let ctrlAPromise = gCustomTextBox.sendKeys(swd.Key.CONTROL + "a");
         return ctrlAPromise;
       })
-      .catch(function(error){
-        console.log(error);
+      .then(function () {
+        let ctrXPromise = gCustomTextBox.sendKeys(swd.Key.CONTROL + "x");
+        return ctrXPromise;
       })
+      .then(function () {
+        let inputBoxPromise = driver.findElement(swd.By.css(".inputarea"));
+        return inputBoxPromise;
+      })
+      .then(function (element) {
+        gCodeBox = element;
+        let inputBoxSelectPromise = element.sendKeys(swd.Key.CONTROL + "a");
+        return inputBoxSelectPromise;
+      })
+      .then(function () {
+        let codePastedPromise = gCodeBox.sendKeys(swd.Key.CONTROL + "v");
+        return codePastedPromise;
+      })
+      .then(function () {
+        console.log("Code pasted in code box !!!");
+        resolve();
+      })
+      .catch(function (error) {
+        reject(error);
+      });
   });
 }
 
@@ -219,8 +233,15 @@ function questionSubmitter(quesLink) {
         let pasteCodePromise = pasteCode();
         return pasteCodePromise;
       })
+      .then(function () {
+        let codeSubmitPromise = navigatorFn(".pull-right.btn.btn-primary.hr-monaco-submit");
+        return codeSubmitPromise;
+      })
+      .then(function () {
+        resolve();
+      })
       .catch(function (error) {
-        console.log(error);
+        reject(error);
       });
   });
 }
