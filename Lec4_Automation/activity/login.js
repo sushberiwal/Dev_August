@@ -1,9 +1,7 @@
 // in dev_august folder
 // npm install selenium-webdriver
 // npm install chromedriver
-
 //selenium => all functions gives promises
-
 require("chromedriver");
 
 let swd = require("selenium-webdriver");
@@ -72,6 +70,12 @@ pageOpenPromise
   .then(function (allHrefs) {
     //all questions links
     let quesSubmitPromise = questionSubmitter(allHrefs[0]);
+    for (let i = 0; i < allHrefs.length; i++) {
+      quesSubmitPromise = quesSubmitPromise.then(function () {
+        let nextQuesSubmitP = questionSubmitter(allHrefs[i]);
+        return nextQuesSubmitP;
+      });
+    }
     return quesSubmitPromise;
   })
   .then(function () {
@@ -100,16 +104,13 @@ function navigatorFn(selector) {
 
   return promise;
 }
-
 function handleLockButton() {
   return new Promise(function (resolve, reject) {
-    let findElementPromise = driver.findElement(
-      swd.By.css(".ui-btn.ui-btn-normal.ui-btn-primary")
-    );
-    findElementPromise
-      .then(function (element) {
-        let elmClickedPromise = element.click();
-        return elmClickedPromise;
+    let findElementPromise = driver.findElement(swd.By.css(".editorial-content-locked .ui-btn.ui-btn-normal.ui-btn-primary"));
+    findElementPromise.then(function (element) {
+        const actions = driver.actions({async: true});
+        let lockBtnPressed =  actions.move({origin:element}).click().perform();
+        return lockBtnPressed;
       })
       .then(function () {
         console.log("Lock btn clicked");
@@ -121,7 +122,6 @@ function handleLockButton() {
       });
   });
 }
-
 function pasteCode() {
   return new Promise(function (resolve, reject) {
     let problemClickedP = navigatorFn('a[data-attr2="Problem"]');
@@ -169,7 +169,6 @@ function pasteCode() {
       });
   });
 }
-
 function getCode() {
   return new Promise(function (resolve, reject) {
     // => get array of codes heading ["c++" , "pyhton","swift"];
@@ -211,7 +210,6 @@ function getCode() {
       });
   });
 }
-
 function questionSubmitter(quesLink) {
   // console.log(quesLink);
   return new Promise(function (resolve, reject) {
@@ -234,7 +232,9 @@ function questionSubmitter(quesLink) {
         return pasteCodePromise;
       })
       .then(function () {
-        let codeSubmitPromise = navigatorFn(".pull-right.btn.btn-primary.hr-monaco-submit");
+        let codeSubmitPromise = navigatorFn(
+          ".pull-right.btn.btn-primary.hr-monaco-submit"
+        );
         return codeSubmitPromise;
       })
       .then(function () {
