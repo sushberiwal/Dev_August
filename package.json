@@ -6,6 +6,7 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "chromedriver": "^84.0.1",
+    "puppeteer": "^5.2.1",
     "request": "^2.88.2",
     "selenium-webdriver": "^4.0.0-alpha.7",
     "xlsx": "^0.16.6"

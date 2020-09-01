@@ -24,5 +24,4 @@ let driver = bldr.forBrowser("chrome").build();
     catch(err){
         console.log(err);
     }
-
 })();

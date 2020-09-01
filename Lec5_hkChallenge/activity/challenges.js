@@ -112,7 +112,8 @@ module.exports = [
           "Output": "12"
         }
       ]
-    }, {
+    }, 
+    {
       "Challenge Name": "Pep_Java_1GettingStarted_7Pattern1",
       "Description": "Question 7",
       "Problem Statement": `Take as input a number n, the number of rows  
@@ -137,7 +138,8 @@ module.exports = [
           *	*	*	*	*  `
         }
       ]
-    }, {
+    },
+     {
       "Challenge Name": "Pep_Java_1GettingStarted_8Pattern2",
       "Description": "Question 8",
       "Problem Statement": `Take as input a number n, the number of rows
@@ -174,7 +176,8 @@ module.exports = [
                       *`
         }
       ]
-    }, {
+    },
+     {
       "Challenge Name": "Pep_Java_2NumberSystemAndFunctions_4Series",
       "Description": "Question 4",
       "Problem Statement": `Take as input
@@ -216,7 +219,8 @@ module.exports = [
           "Output": "25 3125 15625 75 3905 18555"
         }
       ]
-    }, {
+    }, 
+    {
       "Challenge Name": "Pep_Java_2NumberSystemAndFunctions_5IsArmstrong",
       "Description": "IsArmstrong",
       "Problem Statement": `Take as input
@@ -256,7 +260,8 @@ module.exports = [
           1 4150 4151 54748 92727 93084`
         }
       ]
-    },{
+    },
+    {
       "Challenge Name": "Pep_Java_3DataTypeAndBitManipulation_2NumberOfTimesADigitOccur",
       "Description": "Number Of Times A Digit Occur",
       "Problem Statement": `Count the number of d's as digit in a number.
