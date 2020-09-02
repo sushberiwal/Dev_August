@@ -37,14 +37,13 @@ let gBrowser;
   }
 })();
 
+// Recursive function
 async function handleSinglePage() {
-  // for multiple selectors => $$
+  // for multiple elements => $$ returns array of all elements
   await gTab.waitForSelector(".backbone.block-center", { visible: true });
   let anchorTags = await gTab.$$(".backbone.block-center");
-
   //array which contains all the links
   let questionLinksArray = [];
-
   for(let i=0 ; i<anchorTags.length ; i++){
     let link = await gTab.evaluate(function (elem) {
         return elem.getAttribute("href");
@@ -54,7 +53,6 @@ async function handleSinglePage() {
       questionLinksArray.push(link);
   }
    console.log(questionLinksArray);
-   
    // pending promises of all the moderators
    let allModeratorP = [];
    for(let i=0 ; i<questionLinksArray.length ; i++){
@@ -62,7 +60,14 @@ async function handleSinglePage() {
        allModeratorP.push(addModeratorPromise);
    }
    await Promise.all(allModeratorP);
-
+   let lis = await gTab.$$(".pagination li");
+   let next = lis[lis.length-2];
+   let isDisabled = await gTab.evaluate( function(elem){return elem.classList.contains("disabled")}   , next );
+   if(isDisabled){
+       return;
+   }
+   await Promise.all(  [  next.click()  , gTab.waitForNavigation({waitUntil:"networkidle0"}) ]);
+   await handleSinglePage();
 }
 
 async function handleConfirmBtn(tab){
