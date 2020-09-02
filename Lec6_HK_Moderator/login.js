@@ -53,9 +53,49 @@ async function handleSinglePage() {
       link = "https://www.hackerrank.com"+link;
       questionLinksArray.push(link);
   }
-  console.log(questionLinksArray);
-  
+   console.log(questionLinksArray);
+   
+   // pending promises of all the moderators
+   let allModeratorP = [];
+   for(let i=0 ; i<questionLinksArray.length ; i++){
+       let addModeratorPromise = addModerator(questionLinksArray[i]);
+       allModeratorP.push(addModeratorPromise);
+   }
+   await Promise.all(allModeratorP);
+
 }
+
+async function handleConfirmBtn(tab){
+    try{
+        await tab.waitForSelector("#confirm-modal" , {visible:true , timeout:3000});
+        await tab.click("#confirmBtn");
+    }
+    catch(err){
+        console.log("Confirm Modal not found !!");
+        return err;
+    }
+}
+
+async function addModerator(link){
+    try{
+        let nTab = await gBrowser.newPage();
+        await nTab.goto(link);
+        await handleConfirmBtn(nTab);
+        await nTab.waitForSelector('li[data-tab="moderators"]' , {visible:true});
+        //networkidle0 -> there should be not more than 0 requests in a time frame of 500ms => Static websites
+        //networkidle2 -> there should not more than 2 request in a time frame of 500ms => Client based 
+        await Promise.all( [nTab.click('li[data-tab="moderators"]')] , nTab.waitForNavigation({waitUntil:"networkidle0"}) );
+        await nTab.waitForSelector("#moderator" , {visible:true});
+        await nTab.type("#moderator" , "sushant");
+        await nTab.keyboard.press("Enter");
+        await nTab.click(".save-challenge.btn.btn-green");
+        await nTab.close();
+    }
+    catch(err){
+        console.log(err);
+    }
+}
+
 
 async function clickAndWait(selector) {
   try {
