@@ -7,3 +7,6 @@
 ## Puppeteer
 * https://pptr.dev/
 
+## Electron
+* https://www.electronjs.org/docs/tutorial/first-app
+

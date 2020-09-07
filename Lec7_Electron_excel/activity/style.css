@@ -1,0 +1,29 @@
+/* border-box , padding */
+*{
+    box-sizing: border-box;
+}
+
+html,body{
+    margin:0px;
+    padding:0px;
+}
+.menu{
+    border: 1px solid blue;
+    height: 30px;
+}
+.menu-options{
+    border: 1px solid red;
+    height: 50px;
+}
+.formula-tab{
+    border: 1px solid green;
+    height: 30px;
+}
+.content{
+    border: 1px solid red;
+    height: calc(100vh - 140px);
+}
+.sheets{
+    border: 1px solid blue;
+    height: 30px;
+}
