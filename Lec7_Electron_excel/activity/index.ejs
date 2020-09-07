@@ -7,19 +7,32 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    
     <div class="menu">Menu</div>
     <div class="menu-options">Menu-options</div>
     <div class="formula-tab">Formula Tab</div>
     <div class="content">
-       <%for(let i=0 ; i<100 ; i++){%>
-           <div class="row">
-               <%for(let j=0 ; j<26 ; j++){%>
-                   <div class="cell" contenteditable="true">
-                   </div>
+        <div class="top-left-cell"></div>
+        <div class="top-row">
+            <%for(let i=0 ; i<26 ; i++){%>
+                <div class="cell"><%= String.fromCharCode(i+65)%></div>
                 <%}%>
-           </div>
-        <%}%>
+        </div>
+        <div class="left-col">
+            <%for(let i=1 ; i<=100 ; i++){%>
+                <div class="col"><%= i%></div>
+                <%}%>
+        </div>
+    
+      <div class="cells">
+          <%for(let i=0 ; i<100 ; i++){%>
+              <div class="row">
+                  <%for(let j=0 ; j<26 ; j++){%>
+                      <div class="cell" contenteditable="true">
+                      </div>
+                   <%}%>
+              </div>
+           <%}%>
+      </div>
     </div>
     <div class="sheets">Sheets</div>
 </body>

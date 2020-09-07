@@ -23,6 +23,7 @@ html,body{
     height: calc(100vh - 140px);
     background: #2ecc71;
     overflow: auto;
+    position: relative;
 }
 .sheets{
     border: 1px solid blue;
@@ -32,6 +33,36 @@ html,body{
     display: flex;
 }
 .cell{
-    border: 1px solid blue;
+    border: 1px solid;
     min-width: 50px;
+    text-align:center;
+}
+
+.top-left-cell{
+    border: 1px solid gray;
+    height: 20px;
+    width: 30px;
+    background: gray;
+}
+.cells{
+    position: absolute;
+    top: 20px;
+    left: 30px;
+}
+.left-col{
+
+}
+.left-col .col{
+    border: 1px solid;
+    width: 30px;
+    text-align: center;
+}
+.top-row{
+    display: flex;
+    position: absolute;
+    top: 0px;
+    left: 30px;
+}
+.top-row .cell{
+
 }
