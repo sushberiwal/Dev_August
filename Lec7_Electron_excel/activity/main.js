@@ -8,6 +8,10 @@
 
 // BoilerPlate Code
 const electron = require('electron');
+const ejs = require("ejs-electron");
+
+
+ejs.data({"Title":"Electron App"})
 
 const app = electron.app;
 
@@ -21,7 +25,7 @@ function createWindow(){
             nodeIntegration: true
           }
     })
-    win.loadFile('index.html').then(function(){
+    win.loadFile('index.ejs').then(function(){
         win.maximize();
         win.webContents.openDevTools();
     })

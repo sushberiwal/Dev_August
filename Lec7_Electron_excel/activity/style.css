@@ -20,10 +20,18 @@ html,body{
     height: 30px;
 }
 .content{
-    border: 1px solid red;
     height: calc(100vh - 140px);
+    background: #2ecc71;
+    overflow: auto;
 }
 .sheets{
     border: 1px solid blue;
     height: 30px;
+}
+.row{
+    display: flex;
+}
+.cell{
+    border: 1px solid blue;
+    min-width: 50px;
 }
