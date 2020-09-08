@@ -53,6 +53,27 @@ $(document).ready(function () {
           parentCellObj.childs.push(cellObj.name);
       }
   }
+
+  function solveFormula(formula){
+    // ( A1 + A2 ) => ( 10 + 20 );
+    let splitedFormula = formula.split(" ");
+    //["(" , "A1" , "+" , "A2" , ")"]
+    for (let i = 0; i < splitedFormula.length; i++) {
+      let fComp = splitedFormula[i];
+      let character = fComp[0];
+      if (character >= "A" && character <= "Z") {
+        let {rowId , colId} = getRowAndColFromAddress(fComp);
+        let value = db[rowId][colId].value;
+        // console.log(value);
+        formula = formula.replace(fComp , value);
+        // console.log(formula); 
+      }
+    }
+    // console.log(formula);
+    let val = eval(formula);
+    return val;
+  }
+
   function addFormula(formula) {
     let { rowId, colId } = getRowIdColId(lsc);
     let cellObj = db[rowId][colId];
@@ -65,6 +86,11 @@ $(document).ready(function () {
     }
     //goto parent cell object and add self to their childs array
     addSelfToChildsOfParents(cellObj);
+
+    //set value in db as well as ui
+    let value = solveFormula(formula);
+    cellObj.value = value;
+    $(lsc).html(value);
   }
 
   //return rowId and colId from attributes

@@ -1,5 +1,14 @@
-// let a =Number(A);
-let str = "A1"
-let col = str.charCodeAt(0);
-let row = str[1]-1;
-console.log(col-65 , row);
+let formula = "( A1 + A2 )";
+let splitedFormula = formula.split(" ");
+//["(" , "A1" , "+" , "A2" , ")"]
+for (let i = 0; i < splitedFormula.length; i++) {
+  let fComp = splitedFormula[i];
+  let character = fComp[0];
+  if (character >= "A" && character <= "Z") {
+    // let {rowId , colId} = getRowAndColFromAddress(fComp);
+    let value = 10;
+    formula = formula.replace(fComp , value); 
+  }
+}
+
+console.log(formula);
