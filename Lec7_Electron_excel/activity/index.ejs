@@ -9,7 +9,11 @@
 <body>
     <div class="menu">Menu</div>
     <div class="menu-options">Menu-options</div>
-    <div class="formula-tab">Formula Tab</div>
+    <div class="formula-tab">
+        Formula Tab
+       <input type="text" id="address" readonly>
+       <input type="text" id="formula-input">
+    </div>
     <div class="content">
         <div class="top-left-cell"></div>
         <div class="top-row">
@@ -23,11 +27,11 @@
                 <%}%>
         </div>
     
-      <div class="cells">
+      <div class="cells" id="cells">
           <%for(let i=0 ; i<100 ; i++){%>
               <div class="row">
                   <%for(let j=0 ; j<26 ; j++){%>
-                      <div class="cell" contenteditable="true">
+                      <div class="cell" id="cell" contenteditable="true" r-id="<%=i%>" c-id="<%=j%>" >
                       </div>
                    <%}%>
               </div>
@@ -35,5 +39,6 @@
       </div>
     </div>
     <div class="sheets">Sheets</div>
+    <script src="./script.js"></script>
 </body>
 </html>
