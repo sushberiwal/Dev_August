@@ -1,3 +1,5 @@
+// npm install jquery
+// sudo npm install jquery
 let $ = require("jquery");
 
 
