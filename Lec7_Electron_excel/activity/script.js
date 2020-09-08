@@ -10,14 +10,23 @@ $(document).ready(function () {
     // A1 // B2
     let address = String.fromCharCode(colId + 65) + (rowId + 1);
     $("#address").val(address);
+    let formula = db[rowId][colId].formula;
+    $("#formula-input").val(formula);
   });
 
   $("#formula-input").on("blur", function () {
     let formula = $(this).val();
-    if (formula) {
-      addFormula(formula);
+    if(formula) {
+      let {rowId , colId} = getRowIdColId(lsc);
+      let dbFormula = db[rowId][colId].formula;
+      // dbFormula = ? " " , "akjsdbha";
+      if( dbFormula != formula ){
+        if(dbFormula){
+          removeFormula();
+        }
+          addFormula(formula);
+      }
     }
-    $(this).val("");
     console.log(db);
   });
 
@@ -29,11 +38,36 @@ $(document).ready(function () {
     lsc = this;
   });
 
+  function removeFormula(){
+    // value , formula , parents
+    // loop on parents
+    // remove yourself from parents childrens
+    let {rowId , colId} = getRowIdColId(lsc);
+    let cellObj = db[rowId][colId];
+    let toBeRemoved = cellObj.name;
+    let parents = cellObj.parents;
+    for(let i=0 ; i<parents.length ; i++){
+      //["A1" , "A2"]
+      let {rowId , colId} = getRowAndColFromAddress(parents[i]);
+      let parentCellObject = db[rowId][colId];
+      let childs = parentCellObject.childs;
+      let filteredArray = childs.filter( function(elem){
+        return elem != toBeRemoved; 
+      });
+      parentCellObject.childs = filteredArray;
+    } 
+    cellObj.value="";
+    cellObj.formula="";
+    cellObj.parents = [];
+  }
+
   function getParents(formula) {
+    // ( B1 * 10 );
     let parents = [];
     // formula => ( A1 + A2 )
     let splitedFormula = formula.split(" ");
-    //["(" , "A1" , "+" , "A2" , ")"]
+    //["(" , "A1" , "+" , "A2" , ")"];
+    //["(" , "B1" , "*" , "10" , ")"];
     for (let i = 0; i < splitedFormula.length; i++) {
       let fComp = splitedFormula[i];
       let character = fComp[0];
@@ -41,6 +75,7 @@ $(document).ready(function () {
         parents.push(fComp);
       }
     }
+    console.log(parents);
     return parents;
   }
 

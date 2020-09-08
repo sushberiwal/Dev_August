@@ -11,4 +11,15 @@ for (let i = 0; i < splitedFormula.length; i++) {
   }
 }
 
-console.log(formula);
+// console.log(formula);
+
+
+let toBeRemoved = "B2";
+let array = ["A1" , "B2" , "C6" , "A10"];
+
+
+let filteredArray = array.filter( function(elem){
+    return elem != toBeRemoved;
+});
+console.log(array);
+console.log(filteredArray);
