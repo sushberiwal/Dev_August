@@ -33,11 +33,26 @@ $(document).ready(function () {
     // console.log(db);
   });
   $("#cells #cell").on("blur", function () {
-    let value = $(this).text();
-    let { rowId, colId } = getRowIdColId(this);
-    db[rowId][colId].value = value;
-    // console.log(db);
+    // set last selected cell to this
     lsc = this;
+    
+    // value from the UI cell
+    let value = $(this).text();
+    // rowId and colId of cell
+    let { rowId, colId } = getRowIdColId(this);
+    // value = value
+    // formula = value
+    if(value != db[rowId][colId].value ){
+      if(db[rowId][colId].formula){
+        removeFormula();
+        $("#formula-input").val("");
+      }
+
+      // update cellobject value in db
+      db[rowId][colId].value = value;
+      let cellObject = db[rowId][colId];
+      updateChildrens(cellObject);
+    }
   });
 
 
