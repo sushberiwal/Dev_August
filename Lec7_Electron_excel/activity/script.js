@@ -4,7 +4,9 @@ let $ = require("jquery");
 $(document).ready(function () {
   let db;
   let lsc;
-  // event attach on cell => click
+  
+  
+  // DOM Events based functions
   $("#cells #cell").on("click", function () {
     let { rowId, colId } = getRowIdColId(this);
     // A1 // B2
@@ -13,11 +15,11 @@ $(document).ready(function () {
     let formula = db[rowId][colId].formula;
     $("#formula-input").val(formula);
   });
-
   $("#formula-input").on("blur", function () {
     let formula = $(this).val();
     if(formula) {
       let {rowId , colId} = getRowIdColId(lsc);
+      let cellObject = db[rowId][colId];
       let dbFormula = db[rowId][colId].formula;
       // dbFormula = ? " " , "akjsdbha";
       if( dbFormula != formula ){
@@ -25,11 +27,11 @@ $(document).ready(function () {
           removeFormula();
         }
           addFormula(formula);
+          updateChildrens(cellObject);
       }
     }
-    console.log(db);
+    // console.log(db);
   });
-
   $("#cells #cell").on("blur", function () {
     let value = $(this).text();
     let { rowId, colId } = getRowIdColId(this);
@@ -38,6 +40,25 @@ $(document).ready(function () {
     lsc = this;
   });
 
+
+  // functions 
+  function updateChildrens(cellObject){
+    console.log("i am inside update childrens");
+    for(let i=0 ; i<cellObject.childs.length ; i++){
+      // cellObject.childs = ["B1" , "C1"];
+      // A1 + A2;
+      let childName = cellObject.childs[i];
+      console.log("Child Name" , childName);
+      let {rowId , colId} = getRowAndColFromAddress(childName);
+      let childObject = db[rowId][colId];
+      let newValue = solveFormula(childObject.formula);
+      console.log("NEW Value" , newValue);
+      childObject.value = newValue;
+      $(`#cells #cell[r-id=${rowId}][c-id=${colId}]`).html(newValue);
+      console.log(childObject);
+      updateChildrens(childObject);
+    }
+  }
   function removeFormula(){
     // value , formula , parents
     // loop on parents
@@ -60,7 +81,6 @@ $(document).ready(function () {
     cellObj.formula="";
     cellObj.parents = [];
   }
-
   function getParents(formula) {
     // ( B1 * 10 );
     let parents = [];
@@ -78,7 +98,6 @@ $(document).ready(function () {
     console.log(parents);
     return parents;
   }
-
   function addSelfToChildsOfParents(cellObj){
       for(let i=0 ; i<cellObj.parents.length ; i++){
           let addressOfParent = cellObj.parents[i];
@@ -88,7 +107,6 @@ $(document).ready(function () {
           parentCellObj.childs.push(cellObj.name);
       }
   }
-
   function solveFormula(formula){
     // ( A1 + A2 ) => ( 10 + 20 );
     let splitedFormula = formula.split(" ");
@@ -108,7 +126,6 @@ $(document).ready(function () {
     let val = eval(formula);
     return val;
   }
-
   function addFormula(formula) {
     let { rowId, colId } = getRowIdColId(lsc);
     let cellObj = db[rowId][colId];
@@ -128,7 +145,8 @@ $(document).ready(function () {
     $(lsc).html(value);
   }
 
-  //return rowId and colId from attributes
+  //Utility functions
+  //get rowId and colId from attributes
   function getRowIdColId(elem) {
     let rowId = Number($(elem).attr("r-id"));
     let colId = Number($(elem).attr("c-id"));
@@ -137,7 +155,7 @@ $(document).ready(function () {
       colId: colId,
     };
   }
-
+  //get rowId and colId from address
   function getRowAndColFromAddress(address){
     let colId = address.charCodeAt(0)-65;
     let rowId = address[1]-1;
@@ -146,7 +164,7 @@ $(document).ready(function () {
         colId:colId
     }
   }
-
+  // initialize the db
   function init() {
     db = [];
     let allRows = $("#cells").find(".row");
