@@ -1,5 +1,6 @@
 // npm install jquery
 // sudo npm install jquery
+// cheerio 
 let $ = require("jquery");
 $(document).ready(function () {
   let db;
