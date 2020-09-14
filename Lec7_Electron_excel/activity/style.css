@@ -7,13 +7,20 @@ html,body{
     margin:0px;
     padding:0px;
 }
-.menu{
+.menu-container{
     border: 1px solid blue;
     height: 30px;
+    display: flex;
+}
+.menu-container div{
+    margin:2px;
 }
 .menu-options{
     border: 1px solid red;
     height: 50px;
+}
+.menu-options div{
+    margin:2px;
 }
 .formula-tab{
     border: 1px solid green;
@@ -71,4 +78,17 @@ html,body{
 }
 .formula{
     
+}
+
+.file{
+
+}
+.home{
+
+}
+.file-menu-options{
+    display: flex;
+}
+.home-menu-options{
+    display: none;
 }

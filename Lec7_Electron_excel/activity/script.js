@@ -2,12 +2,72 @@
 // sudo npm install jquery
 // cheerio 
 let $ = require("jquery");
+let fs = require('fs');
+let dialog = require("electron").remote.dialog;
 $(document).ready(function () {
   let db;
   let lsc;
   
   
   // DOM Events based functions
+  
+  // new - open - save
+  $("#new").on("click" , function(){
+    console.log("new clicked");
+    // empty database is initialized
+    db = [];
+    let allRows = $("#cells").find(".row");
+    for (let i = 0; i < allRows.length; i++) {
+      let row = [];
+      let allCols = $(allRows[i]).find(".cell");
+      for (let j = 0; j < allCols.length; j++) {
+        let name = String.fromCharCode(j + 65) + (i + 1);
+        let cellObject = {
+          name: name,
+          value: "",
+          formula: "",
+          parents: [],
+          childs: [],
+        };
+        row.push(cellObject);
+        $(allCols[j]).html("");
+      }
+      db.push(row);
+    }
+    $("#address").val("");
+    $("#formula-input").val("");
+  })
+
+  $("#open").on("click" , function(){
+    console.log("clicked on open");
+    // array of paths
+     let paths = dialog.showOpenDialogSync();
+     let path = paths[0];
+    //  steps ??
+    let data = fs.readFileSync(path);
+    data = JSON.parse(data);
+    db = data;
+    // console.log(data);
+    let allRows = $("#cells").find(".row");
+    for(let i=0 ; i<allRows.length ; i++){
+      let allCellsInARow = $(allRows[i]).find(".cell");
+      for(let j=0 ; j<allCellsInARow.length ; j++){
+        $(allCellsInARow[j]).html( db[i][j].value );
+      }
+    }
+
+  })
+
+  $("#save").on("click" , function(){
+    console.log("clicked on save");
+    let path = dialog.showSaveDialogSync();
+    console.log(path);
+    let data = JSON.stringify(db);
+    fs.writeFileSync(path , data);
+    alert("File Saved");
+  })
+  
+  
   $("#cells #cell").on("click", function () {
     let { rowId, colId } = getRowIdColId(this);
     // A1 // B2
@@ -182,24 +242,7 @@ $(document).ready(function () {
   }
   // initialize the db
   function init() {
-    db = [];
-    let allRows = $("#cells").find(".row");
-    for (let i = 0; i < allRows.length; i++) {
-      let row = [];
-      let allCols = $(allRows[i]).find(".cell");
-      for (let j = 0; j < allCols.length; j++) {
-        let name = String.fromCharCode(j + 65) + (i + 1);
-        let cellObject = {
-          name: name,
-          value: "",
-          formula: "",
-          parents: [],
-          childs: [],
-        };
-        row.push(cellObject);
-      }
-      db.push(row);
-    }
+    $("#new").trigger("click");
     // console.log(db);
   }
   init();
