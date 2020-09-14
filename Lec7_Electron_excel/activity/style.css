@@ -17,8 +17,8 @@ body {
   margin: 2px;
 }
 .menu-options {
-  border: 1px solid red;
-  height: 50px;
+  /* border: 1px solid red; */
+  height: 60px;
 }
 .menu-options div {
   margin: 2px;
@@ -94,8 +94,43 @@ body {
 .home {
 }
 .file-menu-options {
-  display: flex;
-}
-.home-menu-options {
   display: none;
 }
+.home-menu-options {
+    display: none;
+  }
+.file-menu-options.active{
+    display: flex;
+  }
+
+.home-menu-options.active{
+  display: flex;
+  /* border: 1px solid red; */
+  height: 100%;
+  width: 350px;
+  justify-content: space-evenly;
+  align-items: center;
+  }
+
+  .formatting{
+
+  }
+  .font-selector{
+
+  }
+  .font-styler{
+
+  }
+  .styling{
+
+  }
+  .font-size{
+
+  }
+  .color{
+
+  }
+  .alignment{
+
+  }
+

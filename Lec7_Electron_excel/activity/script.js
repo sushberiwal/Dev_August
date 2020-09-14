@@ -1,18 +1,17 @@
 // npm install jquery
 // sudo npm install jquery
-// cheerio 
+// cheerio
 let $ = require("jquery");
-let fs = require('fs');
+let fs = require("fs");
 let dialog = require("electron").remote.dialog;
 $(document).ready(function () {
   let db;
   let lsc;
-  
-  
+
   // DOM Events based functions
-  
+
   // new - open - save
-  $("#new").on("click" , function(){
+  $("#new").on("click", function () {
     console.log("new clicked");
     // empty database is initialized
     db = [];
@@ -28,66 +27,114 @@ $(document).ready(function () {
           formula: "",
           parents: [],
           childs: [],
+          fontStyle: { bold: false, underline: false, italic: false },
+
         };
         row.push(cellObject);
         $(allCols[j]).html("");
+        $(allCols[j]).css("font-weight","normal");
+        $(allCols[j]).css("text-decoration","none");
+        $(allCols[j]).css("font-style","normal");
       }
       db.push(row);
     }
+    //reset heights of left cells
+    let leftCols = $("#left-col .left-cell");
+    for (let i = 0; i < leftCols.length; i++) {
+      $(leftCols[i]).height("18");
+    }
     $("#address").val("");
     $("#formula-input").val("");
-  })
+  });
 
-  $("#open").on("click" , function(){
+  $("#open").on("click", function () {
     console.log("clicked on open");
     // array of paths
-     let paths = dialog.showOpenDialogSync();
-     let path = paths[0];
+    let paths = dialog.showOpenDialogSync();
+    let path = paths[0];
     //  steps ??
     let data = fs.readFileSync(path);
     data = JSON.parse(data);
     db = data;
     // console.log(data);
     let allRows = $("#cells").find(".row");
-    for(let i=0 ; i<allRows.length ; i++){
+    for (let i = 0; i < allRows.length; i++) {
       let allCellsInARow = $(allRows[i]).find(".cell");
-      for(let j=0 ; j<allCellsInARow.length ; j++){
-        $(allCellsInARow[j]).html( db[i][j].value );
+      for (let j = 0; j < allCellsInARow.length; j++) {
+        let {value , fontStyle} = db[i][j];
+        let {bold , underline , italic} = fontStyle;
+        $(allCellsInARow[j]).html(value);
+        $(allCellsInARow[j]).css("font-weight", bold ? "bold":"normal");
+        $(allCellsInARow[j]).css("text-decoration", underline ? "underline":"none");
+        $(allCellsInARow[j]).css("font-style", italic ? "italic" : "normal");
       }
     }
+  });
 
-  })
-
-  $("#save").on("click" , function(){
+  $("#save").on("click", function () {
     console.log("clicked on save");
     let path = dialog.showSaveDialogSync();
     console.log(path);
     let data = JSON.stringify(db);
-    fs.writeFileSync(path , data);
+    fs.writeFileSync(path, data);
     alert("File Saved");
+  });
+
+  // bold / underline / italic
+  $("#bold").on("click" , function(){
+    let {rowId , colId} = getRowIdColId(lsc);
+    let cellObject = db[rowId][colId];
+    let {fontStyle} = cellObject;
+    $(lsc).css("font-weight" , fontStyle.bold ? "normal" : "bold");
+    fontStyle.bold = !fontStyle.bold;
   })
-  
- //Scrolling
- $(".content").on("scroll" , function(){
-   let topOffset = $(this).scrollTop();
-   let leftOffset = $(this).scrollLeft();
-  //  console.log(`Top => ${topOffset}`);
-  //  console.log(`Left => ${leftOffset}`);
-   $("#top-row , #top-left-cell").css("top" , topOffset+"px");
-   $("#left-col , #top-left-cell").css("left" , leftOffset+"px");
 
- })
- 
- //keyup
- $("#cells #cell").on("keyup" , function(){
-  // height of cell 
-  let ht = $(this).height(); 
-  let leftCellId = $(this).attr("r-id");
-  let allLeftCells = $("#left-col .left-cell");
-  let leftCell = allLeftCells[leftCellId];
-   $(leftCell).height(ht);
- })
+  $("#underline").on("click" , function(){
+    let {rowId , colId} = getRowIdColId(lsc);
+    let cellObject = db[rowId][colId];
+    let {fontStyle} = cellObject;
+    $(lsc).css("text-decoration" , fontStyle.underline ? "none" : "underline");
+    fontStyle.underline = !fontStyle.underline;
+  })
 
+  $("#italic").on("click" , function(){
+    let {rowId , colId} = getRowIdColId(lsc);
+    let cellObject = db[rowId][colId];
+    let {fontStyle} = cellObject;
+    $(lsc).css("font-style" , fontStyle.italic ? "normal" : "italic");
+    fontStyle.italic = !fontStyle.italic;
+  })
+
+
+
+  //Scrolling
+  $(".content").on("scroll", function () {
+    let topOffset = $(this).scrollTop();
+    let leftOffset = $(this).scrollLeft();
+    //  console.log(`Top => ${topOffset}`);
+    //  console.log(`Left => ${leftOffset}`);
+    $("#top-row , #top-left-cell").css("top", topOffset + "px");
+    $("#left-col , #top-left-cell").css("left", leftOffset + "px");
+  });
+
+  //keyup
+  $("#cells #cell").on("keyup", function () {
+    // height of cell
+    let ht = $(this).height();
+    let leftCellId = $(this).attr("r-id");
+    let allLeftCells = $("#left-col .left-cell");
+    let leftCell = allLeftCells[leftCellId];
+    $(leftCell).height(ht);
+  });
+
+  // file and menu
+  $(".menu-container div").on("click", function () {
+    let id = $(this).attr("id");
+    //id = file
+    $(".file-menu-options").removeClass("active");
+    $(".home-menu-options").removeClass("active");
+    $(`.${id}-menu-options`).addClass("active");
+  });
 
   $("#cells #cell").on("click", function () {
     let { rowId, colId } = getRowIdColId(this);
@@ -99,17 +146,17 @@ $(document).ready(function () {
   });
   $("#formula-input").on("blur", function () {
     let formula = $(this).val();
-    if(formula) {
-      let {rowId , colId} = getRowIdColId(lsc);
+    if (formula) {
+      let { rowId, colId } = getRowIdColId(lsc);
       let cellObject = db[rowId][colId];
       let dbFormula = db[rowId][colId].formula;
       // dbFormula = ? " " , "akjsdbha";
-      if( dbFormula != formula ){
-        if(dbFormula){
+      if (dbFormula != formula) {
+        if (dbFormula) {
           removeFormula();
         }
-          addFormula(formula);
-          updateChildrens(cellObject);
+        addFormula(formula);
+        updateChildrens(cellObject);
       }
     }
     // console.log(db);
@@ -117,15 +164,15 @@ $(document).ready(function () {
   $("#cells #cell").on("blur", function () {
     // set last selected cell to this
     lsc = this;
-    
+
     // value from the UI cell
     let value = $(this).text();
     // rowId and colId of cell
     let { rowId, colId } = getRowIdColId(this);
     // value = value
     // formula = value
-    if(value != db[rowId][colId].value ){
-      if(db[rowId][colId].formula){
+    if (value != db[rowId][colId].value) {
+      if (db[rowId][colId].formula) {
         removeFormula();
         $("#formula-input").val("");
       }
@@ -137,45 +184,44 @@ $(document).ready(function () {
     }
   });
 
-
-  // functions 
-  function updateChildrens(cellObject){
+  // functions
+  function updateChildrens(cellObject) {
     console.log("i am inside update childrens");
-    for(let i=0 ; i<cellObject.childs.length ; i++){
+    for (let i = 0; i < cellObject.childs.length; i++) {
       // cellObject.childs = ["B1" , "C1"];
       // A1 + A2;
       let childName = cellObject.childs[i];
-      console.log("Child Name" , childName);
-      let {rowId , colId} = getRowAndColFromAddress(childName);
+      console.log("Child Name", childName);
+      let { rowId, colId } = getRowAndColFromAddress(childName);
       let childObject = db[rowId][colId];
       let newValue = solveFormula(childObject.formula);
-      console.log("NEW Value" , newValue);
+      console.log("NEW Value", newValue);
       childObject.value = newValue;
       $(`#cells #cell[r-id=${rowId}][c-id=${colId}]`).html(newValue);
       console.log(childObject);
       updateChildrens(childObject);
     }
   }
-  function removeFormula(){
+  function removeFormula() {
     // value , formula , parents
     // loop on parents
     // remove yourself from parents childrens
-    let {rowId , colId} = getRowIdColId(lsc);
+    let { rowId, colId } = getRowIdColId(lsc);
     let cellObj = db[rowId][colId];
     let toBeRemoved = cellObj.name;
     let parents = cellObj.parents;
-    for(let i=0 ; i<parents.length ; i++){
+    for (let i = 0; i < parents.length; i++) {
       //["A1" , "A2"]
-      let {rowId , colId} = getRowAndColFromAddress(parents[i]);
+      let { rowId, colId } = getRowAndColFromAddress(parents[i]);
       let parentCellObject = db[rowId][colId];
       let childs = parentCellObject.childs;
-      let filteredArray = childs.filter( function(elem){
-        return elem != toBeRemoved; 
+      let filteredArray = childs.filter(function (elem) {
+        return elem != toBeRemoved;
       });
       parentCellObject.childs = filteredArray;
-    } 
-    cellObj.value="";
-    cellObj.formula="";
+    }
+    cellObj.value = "";
+    cellObj.formula = "";
     cellObj.parents = [];
   }
   function getParents(formula) {
@@ -195,16 +241,16 @@ $(document).ready(function () {
     console.log(parents);
     return parents;
   }
-  function addSelfToChildsOfParents(cellObj){
-      for(let i=0 ; i<cellObj.parents.length ; i++){
-          let addressOfParent = cellObj.parents[i];
-          //A1 => (0,0)
-          let {rowId,colId} = getRowAndColFromAddress(addressOfParent);
-          let parentCellObj = db[rowId][colId];
-          parentCellObj.childs.push(cellObj.name);
-      }
+  function addSelfToChildsOfParents(cellObj) {
+    for (let i = 0; i < cellObj.parents.length; i++) {
+      let addressOfParent = cellObj.parents[i];
+      //A1 => (0,0)
+      let { rowId, colId } = getRowAndColFromAddress(addressOfParent);
+      let parentCellObj = db[rowId][colId];
+      parentCellObj.childs.push(cellObj.name);
+    }
   }
-  function solveFormula(formula){
+  function solveFormula(formula) {
     // ( A1 + A2 ) => ( 10 + 20 );
     let splitedFormula = formula.split(" ");
     //["(" , "A1" , "+" , "A2" , ")"]
@@ -212,11 +258,11 @@ $(document).ready(function () {
       let fComp = splitedFormula[i];
       let character = fComp[0];
       if (character >= "A" && character <= "Z") {
-        let {rowId , colId} = getRowAndColFromAddress(fComp);
+        let { rowId, colId } = getRowAndColFromAddress(fComp);
         let value = db[rowId][colId].value;
         // console.log(value);
-        formula = formula.replace(fComp , value);
-        // console.log(formula); 
+        formula = formula.replace(fComp, value);
+        // console.log(formula);
       }
     }
     // console.log(formula);
@@ -253,13 +299,13 @@ $(document).ready(function () {
     };
   }
   //get rowId and colId from address
-  function getRowAndColFromAddress(address){
-    let colId = address.charCodeAt(0)-65;
-    let rowId = address[1]-1;
+  function getRowAndColFromAddress(address) {
+    let colId = address.charCodeAt(0) - 65;
+    let rowId = address[1] - 1;
     return {
-        rowId:rowId,
-        colId:colId
-    }
+      rowId: rowId,
+      colId: colId,
+    };
   }
   // initialize the db
   function init() {

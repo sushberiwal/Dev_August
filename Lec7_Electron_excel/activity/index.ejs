@@ -12,13 +12,46 @@
         <div class="home" id="home">Home</div>
     </div>
     <div class="menu-options">
-        <div class="file-menu-options">
+        <div class="file-menu-options active">
             <div class="new" id="new">New</div>
             <div class="open" id="open">Open</div>
             <div class="save" id="save">Save</div>
         </div>
         <div class="home-menu-options">
-            Home Menu Options
+            <div class="formatting">
+                <div class="font-selector">
+                   <select name="font" id="font">
+                       <option value="">Font1</option>
+                       <option value="">Font2</option>
+                       <option value="">Font3</option>
+                       <option value="">Font4</option>
+                   </select>
+                </div>
+                <div class="font-styler">
+                    <input type="button" id="bold" value="B">
+                    <input type="button" id="underline" value="U">
+                    <input type="button" id="italic" value="I">
+                </div>
+            </div>
+            <div class="styling">
+                <div class="font-size">
+                    <select name="fontsize" id="fontsize">
+                        <option value="10">10</option>
+                        <option value="10">12</option>
+                        <option value="10">14</option>
+                        <option value="10">16</option>
+                    </select>
+                </div>
+                <div class="color">
+                    <input type="color" name="fontcolor" id="fontcolor">
+                    <input type="color" name="cellcolor" id="cellcolor">
+                </div>
+            </div>
+            <div class="alignment">
+                <input type="button" value="L">
+                <input type="button" value="C">
+                <input type="button" value="R">
+            </div>
         </div>
     </div>
     <div class="formula-tab">
