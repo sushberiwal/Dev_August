@@ -67,7 +67,28 @@ $(document).ready(function () {
     alert("File Saved");
   })
   
-  
+ //Scrolling
+ $(".content").on("scroll" , function(){
+   let topOffset = $(this).scrollTop();
+   let leftOffset = $(this).scrollLeft();
+  //  console.log(`Top => ${topOffset}`);
+  //  console.log(`Left => ${leftOffset}`);
+   $("#top-row , #top-left-cell").css("top" , topOffset+"px");
+   $("#left-col , #top-left-cell").css("left" , leftOffset+"px");
+
+ })
+ 
+ //keyup
+ $("#cells #cell").on("keyup" , function(){
+  // height of cell 
+  let ht = $(this).height(); 
+  let leftCellId = $(this).attr("r-id");
+  let allLeftCells = $("#left-col .left-cell");
+  let leftCell = allLeftCells[leftCellId];
+   $(leftCell).height(ht);
+ })
+
+
   $("#cells #cell").on("click", function () {
     let { rowId, colId } = getRowIdColId(this);
     // A1 // B2

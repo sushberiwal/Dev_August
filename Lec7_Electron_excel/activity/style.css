@@ -1,94 +1,101 @@
 /* border-box , padding */
-*{
-    box-sizing: border-box;
+* {
+  box-sizing: border-box;
 }
 
-html,body{
-    margin:0px;
-    padding:0px;
+html,
+body {
+  margin: 0px;
+  padding: 0px;
 }
-.menu-container{
-    border: 1px solid blue;
-    height: 30px;
-    display: flex;
+.menu-container {
+  border: 1px solid blue;
+  height: 30px;
+  display: flex;
 }
-.menu-container div{
-    margin:2px;
+.menu-container div {
+  margin: 2px;
 }
-.menu-options{
-    border: 1px solid red;
-    height: 50px;
+.menu-options {
+  border: 1px solid red;
+  height: 50px;
 }
-.menu-options div{
-    margin:2px;
+.menu-options div {
+  margin: 2px;
 }
-.formula-tab{
-    border: 1px solid green;
-    height: 30px;
+.formula-tab {
+  border: 1px solid green;
+  height: 30px;
 }
-.content{
-    height: calc(100vh - 140px);
-    background: #2ecc71;
-    overflow: auto;
-    position: relative;
+.content {
+  height: calc(100vh - 140px);
+  overflow: auto;
+  position: relative;
 }
-.sheets{
-    border: 1px solid blue;
-    height: 30px;
+.sheets {
+  border: 1px solid blue;
+  height: 30px;
 }
-.row{
-    display: flex;
+.row {
+  display: flex;
 }
-.cell{
-    border: 1px solid;
-    min-width: 70px;
-    max-width: 70px;
-    text-align: center;
+.cell {
+  border: 1px solid;
+  min-width: 70px;
+  max-width: 70px;
+  text-align: center;
 }
-.top-left-cell{
+.top-left-cell {
     border: 1px solid gray;
     height: 20px;
     width: 30px;
     background: gray;
+    position: absolute;
+    z-index: 3;
 }
-.cells{
+.cells {
     position: absolute;
     top: 20px;
-    left: 30px; 
+    z-index: 1;
+    left: 30px;
 }
-.left-col{
-
+.left-col {
+    position: absolute;
+    z-index: 2;
+    top: 20px;
+    background: #2ecc71;
 }
-.left-col .col{
-    border: 1px solid;
-    width: 30px;
-    text-align: center;
+.left-col .left-cell {
+  border: 1px solid;
+  width: 30px;
+  text-align: center;
 }
-.top-row{
+.top-row {
     display: flex;
     position: absolute;
     top: 0px;
     left: 30px;
+    z-index: 2;
+    background: #2ecc71;
 }
-.top-row .cell{
+.top-row .top-cell{
+    border: 1px solid;
+  min-width: 70px;
+  max-width: 70px;
+  text-align: center;
+}
+.cell-address {
+}
+.formula {
+}
 
+.file {
 }
-.cell-address{
-
+.home {
 }
-.formula{
-    
+.file-menu-options {
+  display: flex;
 }
-
-.file{
-
-}
-.home{
-
-}
-.file-menu-options{
-    display: flex;
-}
-.home-menu-options{
-    display: none;
+.home-menu-options {
+  display: none;
 }
