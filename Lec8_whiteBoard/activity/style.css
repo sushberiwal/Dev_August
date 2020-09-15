@@ -1,0 +1,21 @@
+*{
+    box-sizing: border-box;
+}
+body,html{
+    margin:0px;
+    padding:0px;
+}
+.tools{
+    /* border: 1px solid blue; */
+    height: 50px;
+    background: antiquewhite;
+}
+
+.drawing-area{
+    /* border: 1px solid; */
+    height: calc(100vh - 50px);
+}
+/* .canvas{
+    height: 100%;
+    width: 100%;
+} */
