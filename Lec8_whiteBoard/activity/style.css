@@ -6,10 +6,32 @@ body,html{
     padding:0px;
 }
 .tools{
-    /* border: 1px solid blue; */
-    height: 50px;
-    background: antiquewhite;
+    height: 80px;
 }
+
+.tool-items{
+    display: flex;
+    justify-content: space-evenly;
+    background: aliceblue;
+    height: 100%;
+    align-items: center;
+    width: 80%;
+    border-radius: 26px;
+    /* position: relative; */
+    /* left: 60px; */
+}
+
+.tool{
+    height: 45px;
+}
+.tool-img{
+    height: 100%;
+}
+.tool-img img{
+    height: 100%;
+}
+
+
 
 .drawing-area{
     /* border: 1px solid; */
@@ -19,3 +41,4 @@ body,html{
     height: 100%;
     width: 100%;
 } */
+

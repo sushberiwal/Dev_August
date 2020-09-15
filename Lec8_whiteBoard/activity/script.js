@@ -15,7 +15,7 @@ window.addEventListener("resize" , function(){
 // ctx.lineTo(200 , 100);
 // ctx.lineTo(200 , 300);
 // ctx.stroke();
-
+ctx.lineWidth = 10;
 
 let isPenDown = false;
 canvas.addEventListener("mousedown" , function(e){
