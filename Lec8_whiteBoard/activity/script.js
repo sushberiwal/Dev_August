@@ -25,9 +25,11 @@ canvas.addEventListener("mousedown", function (e) {
   let x = e.clientX;
   let y = e.clientY - top;
   let point = {
+    id: "md",
     x: x,
     y: y,
-    id: "md",
+    color: ctx.strokeStyle,
+    width: ctx.lineWidth,
   };
   points.push(point);
   ctx.beginPath();
@@ -41,9 +43,11 @@ canvas.addEventListener("mousemove", function (e) {
     let x = e.clientX;
     let y = e.clientY - top;
     let point = {
+      id: "mm",
       x: x,
       y: y,
-      id: "mm",
+      color: ctx.strokeStyle,
+      width: ctx.lineWidth,
     };
     points.push(point);
     ctx.lineTo(x, y);
@@ -60,6 +64,8 @@ canvas.addEventListener("mouseup", function (e) {
 function redraw() {
   for (let i = 0; i < points.length; i++) {
     let point = points[i];
+    ctx.lineWidth = point.width;
+    ctx.strokeStyle = point.color;
     if (point.id == "md") {
       ctx.beginPath();
       ctx.moveTo(point.x, point.y);
@@ -89,14 +95,14 @@ function undoPoints() {
 }
 
 function redoLines() {
-   if(redoPoints.length >=1 ){
-       let redoPoint = redoPoints.pop();
-       for (let i = 0; i < redoPoint.length; i++) {
-         points.push(redoPoint[i]);
-       }
-       // 2. clear canvas
-       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-       // 3. redraw points
-       redraw();
-   } 
+  if (redoPoints.length >= 1) {
+    let redoPoint = redoPoints.pop();
+    for (let i = 0; i < redoPoint.length; i++) {
+      points.push(redoPoint[i]);
+    }
+    // 2. clear canvas
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    // 3. redraw points
+    redraw();
+  }
 }
