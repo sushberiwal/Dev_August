@@ -1,16 +1,16 @@
 const canvas = document.querySelector("#canvas");
-const ctx = canvas.getContext('2d');
+const ctx = canvas.getContext("2d");
 let points = [];
+let redoPoints = [];
 canvas.height = window.innerHeight;
 canvas.width = window.innerWidth;
 // ctx.fillStyle = "red";
 // ctx.fillRect(100, 100 , 150 , 100);
-window.addEventListener("resize" , function(){
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
-    redraw();
-})
-
+window.addEventListener("resize", function () {
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  redraw();
+});
 
 // ctx.beginPath();
 // ctx.moveTo(100 , 100);
@@ -20,54 +20,83 @@ window.addEventListener("resize" , function(){
 ctx.lineWidth = 10;
 
 let isPenDown = false;
-canvas.addEventListener("mousedown" , function(e){
-    let {top} = canvas.getBoundingClientRect();
+canvas.addEventListener("mousedown", function (e) {
+  let { top } = canvas.getBoundingClientRect();
+  let x = e.clientX;
+  let y = e.clientY - top;
+  let point = {
+    x: x,
+    y: y,
+    id: "md",
+  };
+  points.push(point);
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  isPenDown = true;
+});
+
+canvas.addEventListener("mousemove", function (e) {
+  if (isPenDown == true) {
+    let { top } = canvas.getBoundingClientRect();
     let x = e.clientX;
     let y = e.clientY - top;
     let point = {
-        x : x,
-        y : y,
-        id:"md"
-    }
+      x: x,
+      y: y,
+      id: "mm",
+    };
     points.push(point);
-    ctx.beginPath();
-    ctx.moveTo(x , y);
-    isPenDown = true;
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
 });
 
-canvas.addEventListener("mousemove" , function(e){
-    if(isPenDown == true){
-
-        let {top} = canvas.getBoundingClientRect();
-        let x = e.clientX;
-        let y = e.clientY - top;
-        let point = {
-            x : x,
-            y : y,
-            id: "mm"
-        }
-        points.push(point);
-        ctx.lineTo(x , y);
-        ctx.stroke();
-    }
+canvas.addEventListener("mouseup", function (e) {
+  isPenDown = false;
+  ctx.closePath();
+  console.log(points);
 });
 
-canvas.addEventListener("mouseup" , function(e){
-    isPenDown = false;
-    ctx.closePath();
-    console.log(points);
-})
-
-function redraw(){
-    for(let i=0 ; i<points.length ; i++){
-        let point = points[i];
-        if(point.id == "md"){
-            ctx.beginPath();
-            ctx.moveTo(point.x , point.y);
-        }
-        else{
-            ctx.lineTo(point.x , point.y);
-            ctx.stroke();
-        }
+function redraw() {
+  for (let i = 0; i < points.length; i++) {
+    let point = points[i];
+    if (point.id == "md") {
+      ctx.beginPath();
+      ctx.moveTo(point.x, point.y);
+    } else {
+      ctx.lineTo(point.x, point.y);
+      ctx.stroke();
     }
+  }
+}
+
+function undoPoints() {
+  let redoPoint = [];
+  // 1. remove point from points
+  if (points.length >= 2) {
+    let idx = points.length - 1;
+    while (points[idx].id != "md") {
+      redoPoint.unshift(points.pop());
+      idx--;
+    }
+    redoPoint.unshift(points.pop());
+  }
+  redoPoints.push(redoPoint);
+  // 2. clear canvas
+  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+  // 3. redraw points
+  redraw();
+}
+
+function redoLines() {
+   if(redoPoints.length >=1 ){
+       let redoPoint = redoPoints.pop();
+       for (let i = 0; i < redoPoint.length; i++) {
+         points.push(redoPoint[i]);
+       }
+       // 2. clear canvas
+       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+       // 3. redraw points
+       redraw();
+   } 
 }
