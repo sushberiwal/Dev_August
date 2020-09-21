@@ -11,6 +11,8 @@ let blue = document.querySelector("#blue");
 let pencilSlider = document.querySelector("#pencil-size");
 let eraserSlider = document.querySelector("#eraser-size");
 
+let eraserWidth = 1;
+let pencilWidth = 1;
 let activeTool = "pencil";
 
 pencil.addEventListener("click", function () {
@@ -73,8 +75,6 @@ yellow.addEventListener("click", function () {
 });
 
 
-let eraserWidth = 1;
-let pencilWidth = 1;
 
 pencilSlider.addEventListener("change" , function(){
     // console.log(pencilSlider.value);

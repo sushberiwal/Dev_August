@@ -97,11 +97,41 @@ background: #f1c40f;
 }
 
 .drawing-area{
-    /* border: 1px solid; */
     height: calc(100vh - 50px);
 }
-/* .canvas{
-    height: 100%;
-    width: 100%;
-} */
+
+.stickyPad{
+    height: 200px;
+    width: 263px;
+    position: absolute;
+    top: 200px;
+    left: 200px;
+}
+
+.nav{
+    height: 35px;
+    background: lightsteelblue;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.minimize{
+    background: blue;
+    height: 25px;
+    width: 25px;
+    border-radius: 20px;
+}
+.close{
+    background: red;
+    height: 25px;
+    width: 25px;
+    border-radius: 20px;
+}
+
+.content{
+    height: 165px;
+}
+.sticky{
+
+}
 
