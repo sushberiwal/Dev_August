@@ -8,50 +8,82 @@ let black = document.querySelector("#black");
 let red = document.querySelector("#red");
 let yellow = document.querySelector("#yellow");
 let blue = document.querySelector("#blue");
-
+let pencilSlider = document.querySelector("#pencil-size");
+let eraserSlider = document.querySelector("#eraser-size");
 
 let activeTool = "pencil";
-ctx.strokeStyle = "black";
-
 
 pencil.addEventListener("click", function () {
     console.log("clicked on pencil");
-    if(activeTool == "pencil"){
-        if(pencilOptions.classList.contains("active")){
+    if (activeTool == "pencil") {
+        if (pencilOptions.classList.contains("active")) {
             pencilOptions.classList.remove("active");
-        }
-        else{
+        } else {
             pencilOptions.classList.add("active");
         }
-    }
-    else{
+    } else {
         activeTool = "pencil";
+        ctx.lineWidth = pencilWidth;
+        ctx.strokeStyle = "black";
+        pencil.classList.add("active-tool");
+        eraser.classList.remove("active-tool");
+        eraserOptions.classList.remove("active");
     }
 });
 
 eraser.addEventListener("click", function () {
-  console.log("clicked on eraser");
-  ctx.strokeStyle = "white";
+    console.log("clicked on eraser");
+    if (activeTool == "eraser") {
+        if (eraserOptions.classList.contains("active")) {
+            eraserOptions.classList.remove("active");
+        } else {
+            eraserOptions.classList.add("active");
+        }
+    } else {
+        activeTool = "eraser";
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = eraserWidth;
+        eraser.classList.add("active-tool");
+        pencil.classList.remove("active-tool");
+        pencilOptions.classList.remove("active");
+  }
+
 });
 
 undo.addEventListener("click", function () {
-    undoPoints(); 
+  undoPoints();
 });
 
-redo.addEventListener("click" , function(){
-    redoLines();
+redo.addEventListener("click", function () {
+  redoLines();
+});
+
+black.addEventListener("click", function () {
+  ctx.strokeStyle = "black";
+});
+
+blue.addEventListener("click", function () {
+  ctx.strokeStyle = "blue";
+});
+red.addEventListener("click", function () {
+  ctx.strokeStyle = "red";
+});
+yellow.addEventListener("click", function () {
+  ctx.strokeStyle = "yellow";
+});
+
+
+let eraserWidth = 1;
+let pencilWidth = 1;
+
+pencilSlider.addEventListener("change" , function(){
+    // console.log(pencilSlider.value);
+    ctx.lineWidth = pencilSlider.value;
+    pencilWidth = pencilSlider.value;
+})
+eraserSlider.addEventListener("change" , function(){
+    // console.log(pencilSlider.value);
+    ctx.lineWidth = eraserSlider.value;
+    eraserWidth = eraserSlider.value;
 })
 
-black.addEventListener("click" , function(){
-    ctx.strokeStyle = "black";
-})
-
-blue.addEventListener("click" , function(){
-    ctx.strokeStyle = "blue";
-})
-red.addEventListener("click" , function(){
-    ctx.strokeStyle = "red";
-})
-yellow.addEventListener("click" , function(){
-    ctx.strokeStyle = "yellow";
-})

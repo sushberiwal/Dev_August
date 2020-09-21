@@ -34,11 +34,11 @@ body,html{
 .tool{
     height: 60px;
     position: relative;
-    transition: transform 0.2s;
     padding: 10px;
 }
 .tool-img{
     height: 100%;
+    transition : transform 0.2s;
 }
 .tool-img img{
     height: 100%;
@@ -92,7 +92,7 @@ background: #3498db;
 .yellow{
 background: #f1c40f;
 }
-.tool:hover{
+.tool-img:hover{
     transform: scale(1.2);
 }
 

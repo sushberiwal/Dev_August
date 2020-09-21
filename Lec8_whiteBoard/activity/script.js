@@ -58,7 +58,7 @@ canvas.addEventListener("mousemove", function (e) {
 canvas.addEventListener("mouseup", function (e) {
   isPenDown = false;
   ctx.closePath();
-  console.log(points);
+  // console.log(points);
 });
 
 function redraw() {
