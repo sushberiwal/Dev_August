@@ -116,16 +116,18 @@ background: #f1c40f;
     justify-content: flex-end;
 }
 .minimize{
-    background: blue;
+    background: greenyellow;
     height: 25px;
     width: 25px;
     border-radius: 20px;
+    margin-right: 5px;
 }
 .close{
     background: red;
     height: 25px;
     width: 25px;
     border-radius: 20px;
+    margin-right: 5px;
 }
 
 .content{
