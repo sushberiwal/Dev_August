@@ -8,10 +8,11 @@ upload.addEventListener("change", function (e) {
   let reader = new FileReader();
 
   reader.onload = function (e) {
+      let content = createBox();
       let img = document.createElement("img");
-      console.log(e.target.result);
       img.src = e.target.result;
-      document.body.append(img);
+      img.setAttribute("class" , "uploaded-img");
+      content.append(img);
   };
 
      //read the image file as a data URL.

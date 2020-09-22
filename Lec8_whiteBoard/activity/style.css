@@ -133,6 +133,10 @@ background: #f1c40f;
 .content{
     height: 165px;
 }
+.uploaded-img{
+    height:100%;
+    width:100%;
+}
 .sticky{
 
 }
