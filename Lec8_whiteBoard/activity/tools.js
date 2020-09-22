@@ -30,7 +30,9 @@ pencil.addEventListener("click", function () {
         pencil.classList.add("active-tool");
         eraser.classList.remove("active-tool");
         eraserOptions.classList.remove("active");
-    }
+
+        socket.emit( "pencil"  , "black" );
+       }
 });
 
 eraser.addEventListener("click", function () {

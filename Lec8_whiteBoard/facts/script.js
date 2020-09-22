@@ -32,3 +32,8 @@ btn.addEventListener("click" , function(){
         alert("Enter some task !!!");
     }
 })
+
+
+
+
+// npm install electron-packager --save-dev

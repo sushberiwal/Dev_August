@@ -35,6 +35,9 @@ canvas.addEventListener("mousedown", function (e) {
   ctx.beginPath();
   ctx.moveTo(x, y);
   isPenDown = true;
+
+  socket.emit("md" , point);
+
 });
 
 canvas.addEventListener("mousemove", function (e) {
@@ -52,6 +55,7 @@ canvas.addEventListener("mousemove", function (e) {
     points.push(point);
     ctx.lineTo(x, y);
     ctx.stroke();
+    socket.emit("mm" , point);
   }
 });
 
