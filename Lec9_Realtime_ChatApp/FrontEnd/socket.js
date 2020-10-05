@@ -5,6 +5,7 @@ socket.on("receive-msg" , function(obj){
     chatItem.classList.add("left");
     chatItem.innerHTML = `${obj.name}: ${obj.message}`;
     chatBox.appendChild(chatItem);
+    chatBox.scrollTop = chatBox.scrollHeight;
 }) 
 
 
@@ -13,6 +14,7 @@ socket.on("new-user" , function(name){
     chatItem.classList.add("join");
     chatItem.innerHTML = `${name} joined chat`;
     chatBox.appendChild(chatItem);
+    chatBox.scrollTop = chatBox.scrollHeight;
 })
 
 
@@ -21,4 +23,5 @@ socket.on("left-chat" , function(name){
     chatItem.classList.add("leave");
     chatItem.innerHTML = `${name} left chat`;
     chatBox.appendChild(chatItem);
+    chatBox.scrollTop = chatBox.scrollHeight;
 })

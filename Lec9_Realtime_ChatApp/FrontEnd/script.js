@@ -17,6 +17,7 @@ send.addEventListener("click" , function(){
         chatItem.innerHTML = msg;
         chatBox.appendChild(chatItem);
         messageInput.value="";
+        chatBox.scrollTop = chatBox.scrollHeight;
         socket.emit("message-send" , msg );
     }
 })
