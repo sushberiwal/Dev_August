@@ -7,8 +7,6 @@
 
 // BoilerPlate Code
 const electron = require('electron');
-
-
 const app = electron.app;
 
 // Node + Browser

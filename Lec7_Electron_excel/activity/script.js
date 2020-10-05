@@ -28,7 +28,6 @@ $(document).ready(function () {
           parents: [],
           childs: [],
           fontStyle: { bold: false, underline: false, italic: false },
-
         };
         row.push(cellObject);
         $(allCols[j]).html("");
