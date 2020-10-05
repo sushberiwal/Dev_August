@@ -3,6 +3,11 @@ const messageInput = document.querySelector("#chat");
 const send = document.querySelector(".chat-send");
 
 
+const name = prompt("Enter your name ");
+
+socket.emit("new-user-connected" , name);
+
+
 send.addEventListener("click" , function(){
     let msg = messageInput.value;
     if(msg){

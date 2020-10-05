@@ -32,7 +32,7 @@ html,body{
 .left{
     background: white;
     justify-content: center;
-    float: left;
+    /* float: left; */
     clear: both;
 }
 .right{
@@ -41,8 +41,35 @@ html,body{
     justify-content: center;
     float: right;
     clear: both;
-
 }
+
+.join{
+    width: 90%;
+    background: dodgerblue;
+    height: 40px;
+    border-radius: 29px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+    color: white;
+    margin-top: 10px;
+}
+.leave{
+    width: 90%;
+    background: red;
+    height: 40px;
+    border-radius: 29px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30px;
+    color: white;
+    margin-top: 10px;
+}
+
 .chat-input{
     background: white;
     height: 10%;
