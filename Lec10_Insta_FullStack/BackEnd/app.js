@@ -69,6 +69,56 @@ const getById = (req,res) =>{
     }
 }
 
+const updateUser = (req,res)=>{
+    let {uid} = req.params;
+    let users = userDB.filter( (userObj) => {return userObj.uid == uid} );
+    
+    if(users.length){
+        let userToBeUpdated = users[0];
+        console.log(userToBeUpdated);
+        let updateObject = req.body;
+        for(let key in updateObject){
+            userToBeUpdated[key] = updateObject[key];
+        }
+        console.log(userToBeUpdated);
+        fs.writeFileSync("./db/users.json" , JSON.stringify(userDB));
+        res.json({
+            message:"User updated succesfully",
+            data : userToBeUpdated
+        })
+    }
+    else{
+        res.json({
+            message:"User Not Found !!"
+        })
+    }
+}
+const deleteUser = (req,res)=>{
+    // splice(idx , count)?
+    let {uid} = req.params;
+    let userDeleted;
+    let newDb = userDB.filter( (userObj) => {
+        if(userObj.uid == uid){
+            userDeleted = userObj;
+        }
+        return userObj.uid != uid;
+    });
+    if(newDb.length != userDB.length){
+        fs.writeFileSync("./db/users.json" , JSON.stringify(newDb));
+        res.json({
+            message :"User Deleted Successfully",
+            data : userDeleted
+        })
+    }
+    else{
+        res.json({
+            message : "User Not Found !"
+        })
+    }
+
+}
+
+
 // arrow function
 // post a user => add a user in userDB
 app.post("/user" , createUser);
@@ -76,19 +126,10 @@ app.post("/user" , createUser);
 app.get("/user" , getAllUsers);
 // get a user with the help of uid
 app.get("/user/:uid" , getById);
-
 // update a user with the help of uid
-app.patch("/user/:uid" , (req,res)=>{
-
-    //?
-
-})
+app.patch("/user/:uid" , updateUser);
 // delete a user with the help if uid
-app.delete("/user/:uid" , (req,res)=>{
-
-    // ?
-
-})
+app.delete("/user/:uid" , deleteUser);
 
 app.listen(3000 , () => {
     console.log("Server started at port 3000 ");

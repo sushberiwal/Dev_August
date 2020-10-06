@@ -7,10 +7,17 @@
     "uid": "95fa1622-8ae7-463a-9da2-0a8bf958109d"
   },
   {
-    "name": "Sushant beriwal",
-    "handle": "ssuhs123",
+    "name": "Iron Man",
+    "handle": "iamironman",
     "password": 1234567,
     "email": "ab@test.com",
     "uid": "dc9259b1-6f40-4e6a-94c7-a88ff8b5800e"
+  },
+  {
+    "name": "bruce banner",
+    "handle": "iamhulk",
+    "password": 1234567,
+    "email": "hulkk@test.com",
+    "uid": "24a04287-26db-4d25-a98e-50b6ea77f7df"
   }
 ]
