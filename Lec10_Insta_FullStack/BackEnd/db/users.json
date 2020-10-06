@@ -1,0 +1,16 @@
+[
+  {
+    "name": "Steve Rogers",
+    "handle": "steve123",
+    "password": 1234567,
+    "email": "abcd@test.com",
+    "uid": "95fa1622-8ae7-463a-9da2-0a8bf958109d"
+  },
+  {
+    "name": "Sushant beriwal",
+    "handle": "ssuhs123",
+    "password": 1234567,
+    "email": "ab@test.com",
+    "uid": "dc9259b1-6f40-4e6a-94c7-a88ff8b5800e"
+  }
+]
