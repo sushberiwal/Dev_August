@@ -58,53 +58,41 @@ app.use(express.json());
 //     })
 // })
 
-function insertUser(user){
-    return new Promise( (resolve,reject)=>{
-        let uid = user.uid;
-        let name = user.name;
-        let email = user.email;
-        let bio = user.bio;
-        let handle = user.handle;
-        let phone = user.phone;
 
-        // insert query => app.js => cloud db in table user_table
-        let sql = `INSERT INTO user_table(uid, name, email, phone, bio, handle) VALUES ('${uid}','${name}','${email}',${phone},'${bio}','${handle}')`;
-        connection.query(sql , function (error, results) {
-           if(error){
-               reject(error);
-           }
-           else{
-               resolve(results);
-           }
-        });
+const createUser = (req,res) => {
+    // console.log(req.body);
+    let uid = uuidv4();
+    let user = req.body;
+    user.uid = uid;
+    userDB.push(user);
+    fs.writeFileSync("./db/users.json" , JSON.stringify(userDB));
 
-    });
+    res.json({
+        message:"successfully added a user",
+        data : req.body
+    })
 }
-
-const createUser = async (req,res) => {
-    try{
-        let uid = uuidv4();
-        let user = req.body;
-        user.uid = uid;
-        let result = await insertUser(user);
-        res.json({
-            "message":"User created Succesfully !",
-            "data" : result
-        })
-    }
-    catch(err){
-        res.json({
-            "message":"User creation failed !!",
-            "error":err
-        })
-    }
-
-}
-
-
 
 // post a user => add a user in userDB
 app.post("/user" , createUser);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const getAllUsers = (req,res) => {
     console.log(req.body);
     res.json({
