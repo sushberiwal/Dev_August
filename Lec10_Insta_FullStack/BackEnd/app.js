@@ -6,6 +6,8 @@ const express = require("express");
 const userDB = require("./db/users.json");
 const fs = require("fs");
 const { v4: uuidv4 } = require('uuid');
+const connection = require("./db/connection");
+
 
 // server created
 const app = express();
@@ -16,8 +18,34 @@ const app = express();
 // res = response => to ui , to postman
 // to see data in request body use this
 // middleware function
+
+
+// user defined middleware function
+
+app.use(function(req,res,next){
+    console.log("Before express.json");
+    console.log("Req Body = " , req.body);
+    next();
+});
+
+
 app.use(express.json());
 
+
+app.use(function(req,res,next){
+    console.log("After express.json");
+    console.log("Req Body = " , req.body);
+
+    let allKeys = Object.keys(req.body);
+    if(allKeys.length == 0){
+        res.json({
+            message : "Body cannot be empty !!"
+        })
+    }
+    else{
+        next();
+    }
+});
 
 // app.get("/home" , function(req,res){
 //     console.log(req.body);
@@ -93,6 +121,7 @@ const updateUser = (req,res)=>{
         })
     }
 }
+
 const deleteUser = (req,res)=>{
     // splice(idx , count)?
     let {uid} = req.params;
@@ -119,10 +148,13 @@ const deleteUser = (req,res)=>{
 }
 
 
+// Create read update delete operations (CRUD);
+
 // arrow function
 // post a user => add a user in userDB
 app.post("/user" , createUser);
 // get all user
+app.get("/user" , getAllUsers);
 app.get("/user" , getAllUsers);
 // get a user with the help of uid
 app.get("/user/:uid" , getById);
