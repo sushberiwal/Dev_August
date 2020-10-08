@@ -5,192 +5,180 @@
 const express = require("express");
 const userDB = require("./db/users.json");
 const fs = require("fs");
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4 } = require("uuid");
 const connection = require("./db/connection");
-
-
 
 // server created
 const app = express();
-
-// api logic
-
-// req = request => from ui , from postman
-// res = response => to ui , to postman
-// to see data in request body use this
-// middleware function
-
-
-// user defined middleware function
-
-// app.use(function(req,res,next){
-//     console.log("Before express.json");
-//     console.log("Req Body = " , req.body);
-//     next();
-// });
-
-
 app.use(express.json());
 
+function sqlQueries(action, data) {
+  return new Promise((resolve, reject) => {
+    if (action == "createUser") {
+      let user = data.user;
+      let uid = user.uid;
+      let name = user.name;
+      let email = user.email;
+      let bio = user.bio;
+      let handle = user.handle;
+      let phone = user.phone;
+      let sql = `INSERT INTO user_table(uid, name, email, phone, bio, handle) VALUES ('${uid}','${name}','${email}',${phone},'${bio}','${handle}')`;
+      connection.query(sql, function (error, results) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(results);
+        }
+      });
+    } else if (action == "getAllUsers") {
+      let sql = `SELECT * FROM user_table`;
+      connection.query(sql, function (error, result) {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      });
+    } else if (action == "getUserById") {
+      let uid = data.uid;
+      let sql = `SELECT * FROM user_table WHERE uid = '${uid}'`;
+      connection.query(sql, function (err, result) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    } else if (action == "deleteById") {
+      let uid = data.uid;
+      let sql = `DELETE FROM user_table where uid="${uid}"`;
+      connection.query(sql, function (err, data) {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    } else if (action == "updateUserById"){
+        
+        let uid = data.uid; //76567567
+        let updateObject = data.updateObject; 
+        // console.log(updateObject);
+        let updateSql = "UPDATE user_table SET";
+        // UPDATE user_table SET name= "steve rogers", handle="iamwintersoldier" WHERE uid = "5616515"; 
+        for(key in updateObject){
+            updateSql+= ` ${key}='${updateObject[key]}',`;
+        }
+        updateSql = updateSql.slice(0, -1);
+        updateSql += ` WHERE uid='${uid}';`;
+        console.log(updateSql);
 
-// app.use(function(req,res,next){
-//     console.log("After express.json");
-//     console.log("Req Body = " , req.body);
-
-//     let allKeys = Object.keys(req.body);
-//     if(allKeys.length == 0){
-//         res.json({
-//             message : "Body cannot be empty !!"
-//         })
-//     }
-//     else{
-//         next();
-//     }
-// });
-
-// app.get("/home" , function(req,res){
-//     console.log(req.body);
-
-//     res.json({
-//         message : "success",
-//         data : req.body
-//     })
-// })
-
-
-
-
-function insertUser(user){
-    return new Promise( (resolve,reject)=>{
-        let uid = user.uid;
-        let name = user.name;
-        let email = user.email;
-        let bio = user.bio;
-        let handle = user.handle;
-        let phone = user.phone;
-
-        // insert query => app.js => cloud db in table user_table
-        let sql = `INSERT INTO user_table(uid, name, email, phone, bio, handle) VALUES ('${uid}','${name}','${email}',${phone},'${bio}','${handle}')`;
-        connection.query(sql , function (error, results) {
-           if(error){
-               reject(error);
-           }
-           else{
-               resolve(results);
-           }
-        });
-
-    });
+        connection.query(updateSql , function(error,data){
+            if(error){
+                reject(error);
+            }else{
+                resolve(data);
+            }
+        })
+    }
+  });
 }
 
-const createUser = async (req,res) => {
+// post a user => add a user in userDB
+const createUser = async (req, res) => {
+  try {
+    let uid = uuidv4();
+    let user = req.body;
+    user.uid = uid;
+    let result = await sqlQueries("createUser", { user: user });
+    res.json({
+      message: "User created Succesfully !",
+      data: result,
+    });
+  } catch (err) {
+    res.json({
+      message: "User creation failed !!",
+      error: err,
+    });
+  }
+};
+app.post("/user", createUser);
+
+// get all users from user table
+const getAllUsers = async (req, res) => {
+  try {
+    let result = await sqlQueries("getAllUsers");
+    res.json({
+      message: "Successfully got all users",
+      data: result,
+    });
+  } catch (err) {
+    res.json({
+      message: "Failed to get all users !",
+      error: err,
+    });
+  }
+};
+app.get("/user", getAllUsers);
+
+// get a user with the help of uid
+const getById = async (req, res) => {
+  try {
+    let { uid } = req.params;
+    let user = await sqlQueries("getUserById", { uid: uid });
+    res.json({
+      message: "succesfully get user by id",
+      data: user,
+    });
+  } catch (err) {
+    res.json({
+      message: "Cannot get user",
+      error: err,
+    });
+  }
+};
+app.get("/user/:uid", getById);
+
+// delete a user with the help if uid
+const deleteUser = async (req, res) => {
+  try {
+    let { uid } = req.params;
+    let result = await sqlQueries("deleteById", { uid: uid });
+    res.json({
+      message: "User deleted Succesfully",
+      data: result,
+    });
+  } catch (err) {
+    res.json({
+      message: "Cannot delete user",
+      error: err,
+    });
+  }
+};
+app.delete("/user/:uid", deleteUser);
+
+
+// update a user with the help of uid
+const updateUser = async (req, res) => {
     try{
-        let uid = uuidv4();
-        let user = req.body;
-        user.uid = uid;
-        let result = await insertUser(user);
+        let { uid } = req.params;
+        
+        let result = await sqlQueries("updateUserById" , {uid:uid , updateObject:req.body});
         res.json({
-            "message":"User created Succesfully !",
-            "data" : result
-        })
+            message:"user update successfully",
+            data : result
+        }) 
     }
     catch(err){
         res.json({
-            "message":"User creation failed !!",
-            "error":err
+            message:"user update failed",
+            error:err
         })
     }
+  };
+app.patch("/user/:uid", updateUser);
 
-}
 
-
-
-// post a user => add a user in userDB
-app.post("/user" , createUser);
-const getAllUsers = (req,res) => {
-    console.log(req.body);
-    res.json({
-        message :"Succesfully get all user",
-        data : userDB.length ? userDB : "User DB empty !"
-    })
-} 
-const getById = (req,res) =>{
-    let {uid} = req.params;
-    // array
-    let user = userDB.filter(  (userObj) => { return userObj.uid == uid  } );
-    console.log(user);
-    if(user.length){
-        res.json({
-            message:"get a user by id successfully",
-            data : user[0]
-        })
-    }
-    else{
-        res.json({
-            message:"User not found !!"
-        })
-    }
-}
-const updateUser = (req,res)=>{
-    let {uid} = req.params;
-    let users = userDB.filter( (userObj) => {return userObj.uid == uid} );
-    
-    if(users.length){
-        let userToBeUpdated = users[0];
-        console.log(userToBeUpdated);
-        let updateObject = req.body;
-        for(let key in updateObject){
-            userToBeUpdated[key] = updateObject[key];
-        }
-        console.log(userToBeUpdated);
-        fs.writeFileSync("./db/users.json" , JSON.stringify(userDB));
-        res.json({
-            message:"User updated succesfully",
-            data : userToBeUpdated
-        })
-    }
-    else{
-        res.json({
-            message:"User Not Found !!"
-        })
-    }
-}
-const deleteUser = (req,res)=>{
-    // splice(idx , count)?
-    let {uid} = req.params;
-    let userDeleted;
-    let newDb = userDB.filter( (userObj) => {
-        if(userObj.uid == uid){
-            userDeleted = userObj;
-        }
-        return userObj.uid != uid;
-    });
-    if(newDb.length != userDB.length){
-        fs.writeFileSync("./db/users.json" , JSON.stringify(newDb));
-        res.json({
-            message :"User Deleted Successfully",
-            data : userDeleted
-        })
-    }
-    else{
-        res.json({
-            message : "User Not Found !"
-        })
-    }
-
-}
-// Create read update delete operations (CRUD);
-// arrow function
-// get all user
-app.get("/user" , getAllUsers);
-app.get("/user" , getAllUsers);
-// get a user with the help of uid
-app.get("/user/:uid" , getById);
-// update a user with the help of uid
-app.patch("/user/:uid" , updateUser);
-// delete a user with the help if uid
-app.delete("/user/:uid" , deleteUser);
-
-app.listen(3000 , () => {
-    console.log("Server started at port 3000 ");
-})
+app.listen(3000, () => {
+  console.log("Server started at port 3000 ");
+});
