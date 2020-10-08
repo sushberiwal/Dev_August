@@ -10,7 +10,6 @@ const connection = require("./db/connection");
 
 
 
-
 // server created
 const app = express();
 
@@ -57,6 +56,9 @@ app.use(express.json());
 //         data : req.body
 //     })
 // })
+
+
+
 
 function insertUser(user){
     return new Promise( (resolve,reject)=>{
