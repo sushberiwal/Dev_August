@@ -12,7 +12,7 @@ const connection = require("./db/connection");
 const app = express();
 app.use(express.json());
 
-function sqlQueries(action, data) {
+function userQueries(action, data) {
   return new Promise((resolve, reject) => {
     if (action == "createUser") {
       let user = data.user;
@@ -22,7 +22,8 @@ function sqlQueries(action, data) {
       let bio = user.bio;
       let handle = user.handle;
       let phone = user.phone;
-      let sql = `INSERT INTO user_table(uid, name, email, phone, bio, handle) VALUES ('${uid}','${name}','${email}',${phone},'${bio}','${handle}')`;
+      let isPublic = user.is_public;
+      let sql = `INSERT INTO user_table(uid, name, email, phone, bio, handle , is_public) VALUES ('${uid}','${name}','${email}',${phone},'${bio}','${handle}', '${isPublic}')`;
       connection.query(sql, function (error, results) {
         if (error) {
           reject(error);
@@ -83,14 +84,13 @@ function sqlQueries(action, data) {
     }
   });
 }
-
 // post a user => add a user in userDB
 const createUser = async (req, res) => {
   try {
     let uid = uuidv4();
     let user = req.body;
     user.uid = uid;
-    let result = await sqlQueries("createUser", { user: user });
+    let result = await userQueries("createUser", { user: user });
     res.json({
       message: "User created Succesfully !",
       data: result,
@@ -107,7 +107,7 @@ app.post("/user", createUser);
 // get all users from user table
 const getAllUsers = async (req, res) => {
   try {
-    let result = await sqlQueries("getAllUsers");
+    let result = await userQueries("getAllUsers");
     res.json({
       message: "Successfully got all users",
       data: result,
@@ -125,7 +125,7 @@ app.get("/user", getAllUsers);
 const getById = async (req, res) => {
   try {
     let { uid } = req.params;
-    let user = await sqlQueries("getUserById", { uid: uid });
+    let user = await userQueries("getUserById", { uid: uid });
     res.json({
       message: "succesfully get user by id",
       data: user,
@@ -143,7 +143,7 @@ app.get("/user/:uid", getById);
 const deleteUser = async (req, res) => {
   try {
     let { uid } = req.params;
-    let result = await sqlQueries("deleteById", { uid: uid });
+    let result = await userQueries("deleteById", { uid: uid });
     res.json({
       message: "User deleted Succesfully",
       data: result,
@@ -163,7 +163,7 @@ const updateUser = async (req, res) => {
     try{
         let { uid } = req.params;
         
-        let result = await sqlQueries("updateUserById" , {uid:uid , updateObject:req.body});
+        let result = await userQueries("updateUserById" , {uid:uid , updateObject:req.body});
         res.json({
             message:"user update successfully",
             data : result
@@ -177,6 +177,93 @@ const updateUser = async (req, res) => {
     }
   };
 app.patch("/user/:uid", updateUser);
+
+
+// Request
+
+function addInFollowerTable(obj){
+    return new Promise((resolve,reject)=>{
+        
+        let uid = obj.follow_id;
+        let follower_id = obj.uid;
+        let sql = `INSERT INTO user_follower(uid, follower_id) VALUES ('${uid}','${follower_id}')`;
+        connection.query(sql , function(error , data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    })
+}
+
+function sendFollowRequest(obj){
+    return new Promise(async (resolve,reject)=>{
+        let result = await userQueries("getUserById" , {uid:obj.follow_id});
+        let isPublic = result[0].is_public;
+        if(isPublic == 1){
+            //request is send and is accepted
+            let uid = obj.uid;
+            let follow_id = obj.follow_id;
+            await addInFollowerTable({uid , follow_id});
+            let sql = `INSERT INTO user_following(uid, follow_id, is_accepted) VALUES ('${uid}','${follow_id}',true)`;
+            connection.query(sql , function(error,data){
+                if(error){
+                    reject(error);
+                }
+                else{
+                    resolve({data , message:"Request accepted "});
+                }
+            })
+        }
+        else{
+            // request is sent but is pending
+            let uid = obj.uid;
+            let follow_id = obj.follow_id;
+            let sql = `INSERT INTO user_following(uid, follow_id) VALUES ('${uid}','${follow_id}')`;
+            connection.query(sql , function(error,data){
+                if(error){
+                    reject(error);
+                }
+                else{
+                    resolve({data , message:"Pending Request Send"});
+                }
+            })
+        }
+    })
+}
+
+// send follow request =>
+const sendRequest = async (req,res) => {
+    try{
+
+        let obj = req.body;
+        let result = await sendFollowRequest(obj);
+        res.json({
+            message:result.message,
+            data : result.data
+        })
+    }
+    catch(err){
+        res.json({
+            "message":"Cant send request",
+            "error":err
+        })
+    }
+}
+app.post("/user/request" , sendRequest);
+// if(account public) => request accepted
+// else => request pending
+// req.body = {
+//     uid : "123123123",
+//     
+// }
+
+
+
+
+
 
 
 app.listen(3000, () => {
