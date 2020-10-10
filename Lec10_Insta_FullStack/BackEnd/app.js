@@ -253,14 +253,207 @@ const sendRequest = async (req,res) => {
     }
 }
 app.post("/user/request" , sendRequest);
-// if(account public) => request accepted
-// else => request pending
-// req.body = {
-//     uid : "123123123",
-//     
-// }
 
 
+// count of following , all following , count of followers , all followers
+function getFollowingById(uid){
+    return new Promise((resolve,reject)=>{
+        let sql = `SELECT * FROM user_following WHERE uid='${uid}' AND is_accepted = 1`;
+        console.log(sql);
+        connection.query(sql, function(error,data){
+            if(error){
+                reject(error);
+           }
+           else{
+               resolve(data);
+           }
+        })
+    })
+}
+const countFollowing = async (req,res) =>{
+    try{
+        let uid = req.params.uid;
+        let allFollowingMapping = await getFollowingById(uid);
+        // let allFollowing = [];
+        // for(let i=0 ;i <allFollowingMapping.length ; i++){
+        //     let uid = allFollowingMapping[i].follow_id;
+        //     let user = await userQueries("getUserById" , {uid:uid});
+        //     allFollowing.push(user[0]);
+        // }        
+        res.json({
+            message : "Successfully get Count of all following",
+            following : allFollowingMapping.length
+        })
+    }
+    catch(err){
+        res.json({
+            message : "Failed to get count of all following",
+            error : err
+        })
+    }
+}
+const getFollowing = async (req,res) =>{
+    try{
+        let uid = req.params.uid;
+        let allFollowingMapping = await getFollowingById(uid);
+        let allFollowing = [];
+        for(let i=0 ;i <allFollowingMapping.length ; i++){
+            let uid = allFollowingMapping[i].follow_id;
+            let user = await userQueries("getUserById" , {uid:uid});
+            allFollowing.push(user[0]);
+        }        
+        res.json({
+            message : "Successfully get all following",
+            data : allFollowing
+        })
+    }
+    catch(err){
+        res.json({
+            message : "Failed to get all following",
+            error : err
+        })
+    }
+}
+
+function getFollowersById(uid){
+    return new Promise( (resolve,reject) =>{
+        let sql = `SELECT * FROM user_follower WHERE uid='${uid}'`;
+        // console.log(sql);
+        connection.query(sql, function(error,data){
+            if(error){
+                reject(error);
+           }
+           else{
+               resolve(data);
+           }
+        })
+    });
+}
+const countFollowers = async (req,res) =>{
+    try{
+        let uid = req.params.uid;
+        let allFollowersMapping = await getFollowersById(uid);    
+        res.json({
+            message:"Succesfully get Count of all Followers",
+            followers:allFollowersMapping.length
+        })
+    }
+    catch(err){
+        res.json({
+            message:"Failed to get Count of all followers",
+            error : err
+        })
+    }
+}
+const getFollowers = async (req,res) =>{
+    try{
+        let uid = req.params.uid;
+        let allFollowersMapping = await getFollowersById(uid);
+        console.log(allFollowersMapping);
+        let allFollowers = [];
+        for(let i=0 ; i<allFollowersMapping.length ; i++){
+            let uid = allFollowersMapping[i].follower_id;
+            let user = await userQueries("getUserById" , {uid:uid});
+            allFollowers.push(user[0]);
+        }
+        res.json({
+            message:"Succesfully get all Followers",
+            followers:allFollowers
+        })
+    }
+    catch(err){
+        res.json({
+            message:"Failed to get all followers",
+            error : err
+        })
+    }
+}
+
+// get count of following
+app.get("/user/count/following/:uid" , countFollowing); //done
+// get all following 
+app.get("/user/following/:uid" , getFollowing); // done
+// get count of followers
+app.get("/user/count/followers/:uid" , countFollowers); // done 
+// get all followers 
+app.get("/user/followers/:uid" , getFollowers); //done
+
+
+// see pending requests ???
+function getRequestsById(uid){
+    return new Promise((resolve,reject)=>{
+        let sql = `SELECT * FROM user_following WHERE follow_id = '${uid}' AND is_accepted = 0;`
+        console.log(sql);
+        connection.query(sql , function(err,data){
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    })
+}
+const getRequests = async (req,res) =>{
+    try{
+        let uid = req.params.uid;
+        let requests = await getRequestsById(uid);
+        let pendingRequests =[];
+        for(let i=0 ; i<requests.length ; i++){
+            let uid = requests[i].uid;
+            let user = await userQueries("getUserById" , {uid:uid})
+            pendingRequests.push(user[0]); 
+        }
+        res.json({
+            message:"Succesfully get all pending requests !!",
+            data:pendingRequests
+        })
+    }
+    catch(err){
+        res.json({
+            message:"failed to get all pending requests !!",
+            error:err
+        })
+    }
+}
+app.get("/user/request/:uid" , getRequests);
+
+
+
+
+// accept requests ??
+function acceptRequestById(obj){
+    return new Promise((resolve,reject)=>{
+        let uid = obj.uid;
+        let accept_id = obj.accept_id;
+        let sql = `UPDATE user_following SET is_accepted = 1 WHERE follow_id='${uid}' AND uid='${accept_id}'`;
+        connection.query(sql , function(error,data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    })
+}
+const acceptRequest = async (req , res) =>{
+    try{
+    await acceptRequestById(req.body);
+    await addInFollowerTable({uid:req.body.accept_id , follow_id:req.body.uid});
+    res.json({
+        message:"Request accepted !",
+    })
+
+    }
+    catch(err){
+        res.json({
+            message:"failed to accept request",
+            error:err
+        })
+    }
+}
+app.post("/user/request/accept" , acceptRequest);
 
 
 
