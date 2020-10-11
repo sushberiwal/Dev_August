@@ -7,10 +7,11 @@ const userDB = require("./db/users.json");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const connection = require("./db/connection");
-
+const cors = require("cors");
 // server created
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 function userQueries(action, data) {
   return new Promise((resolve, reject) => {

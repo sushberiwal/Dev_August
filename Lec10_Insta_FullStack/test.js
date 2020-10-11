@@ -14,3 +14,8 @@ let filteredArray = usersDb.filter(  function(obj){
 });
     let user = filteredArray[0];
     console.log(user);
+
+
+let name = "Sushant"
+let string =  "My name is"+name;
+let string1 = `My name is ${name}`;
