@@ -100,14 +100,6 @@ const createUser = async (req,res) => {
 app.post("/user" , createUser);
 
 
-
-
-
-
-
-
-
-
 function getUsers(){
     return new Promise(function(resolve , reject){
         let sql = `SELECT * FROM user_table;`;
@@ -125,7 +117,6 @@ function getUsers(){
 
 const getAllUsers = async (req,res) => {
     try{
-
       let users = await getUsers();
       console.log(users);
       res.json({
@@ -140,88 +131,143 @@ const getAllUsers = async (req,res) => {
             error : err
         })
     }
-
 }
 // get all user
 app.get("/user" , getAllUsers);
 
 
 
+function getUserById(uid){
+    return new Promise( function(resolve , reject) {
+        let sql = `SELECT * FROM user_table WHERE uid="${uid}"`;
+        connection.query(sql , function(error , data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    });
+}
 
-const getById = (req,res) =>{
-    let {uid} = req.params;
-    // array
-    let user = userDB.filter(  (userObj) => { return userObj.uid == uid  } );
-    console.log(user);
-    if(user.length){
+
+const getById = async (req,res) =>{
+    try{
+        let uid = req.params.uid;
+        console.log(uid);
+        let user = await getUserById(uid);
         res.json({
-            message:"get a user by id successfully",
+            message:"Got user by id succesfully !",
             data : user[0]
         })
     }
-    else{
+    catch(err){
         res.json({
-            message:"User not found !!"
+            message:"Failed to get user by id",
+            error : err
         })
     }
 }
-const updateUser = (req,res)=>{
-    let {uid} = req.params;
-    let users = userDB.filter( (userObj) => {return userObj.uid == uid} );
-    
-    if(users.length){
-        let userToBeUpdated = users[0];
-        console.log(userToBeUpdated);
-        let updateObject = req.body;
-        for(let key in updateObject){
-            userToBeUpdated[key] = updateObject[key];
-        }
-        console.log(userToBeUpdated);
-        fs.writeFileSync("./db/users.json" , JSON.stringify(userDB));
-        res.json({
-            message:"User updated succesfully",
-            data : userToBeUpdated
-        })
-    }
-    else{
-        res.json({
-            message:"User Not Found !!"
-        })
-    }
-}
-const deleteUser = (req,res)=>{
-    // splice(idx , count)?
-    let {uid} = req.params;
-    let userDeleted;
-    let newDb = userDB.filter( (userObj) => {
-        if(userObj.uid == uid){
-            userDeleted = userObj;
-        }
-        return userObj.uid != uid;
-    });
-    if(newDb.length != userDB.length){
-        fs.writeFileSync("./db/users.json" , JSON.stringify(newDb));
-        res.json({
-            message :"User Deleted Successfully",
-            data : userDeleted
-        })
-    }
-    else{
-        res.json({
-            message : "User Not Found !"
-        })
-    }
+// get a user with the help of uid
+app.get("/user/:uid" , getById);
 
+
+function deleteById(uid){
+    return new Promise( function(resolve , reject){
+        let sql = `DELETE FROM user_table WHERE uid = "${uid}";`;
+        connection.query( sql , function(error ,data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    });
+}
+
+const deleteUser = async (req,res)=>{
+    try{
+        let uid = req.params.uid;
+        let data = await deleteById(uid);
+        console.log(data);
+        res.json({
+            message:"User deleted Succesfully",
+            data : data
+        })
+    }
+    catch(err){
+        res.json({
+            message:"failed to delete user",
+            error : err
+        })
+    }
+}
+// delete a user with the help if uid
+app.delete("/user/:uid" , deleteUser);
+
+
+
+function updateById(uid , updateObject){
+
+    return new Promise( (resolve , reject) => {
+        // name , bio , handle
+
+        let sql = `UPDATE user_table SET`;
+
+        for(key in updateObject){
+            sql += ` ${key} = "${updateObject[key]}" ,`             
+        }
+
+        sql = sql.slice(0 , -1);
+        sql+= `WHERE uid = "${uid}";`;
+        console.log(sql);
+        // UPDATE user_table SET
+        //  name = "" , bio = "" , handle = "" ,
+        // WHERE uid = ""
+
+        connection.query(sql , function(error , data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    })
+}
+
+
+
+
+const updateUser = async (req,res)=>{
+    try{
+        let uid = req.params.uid;
+        let updateObject = req.body;
+        // console.log(uid);
+        // console.log(updateObject);
+        let result = await updateById(uid , updateObject);
+        res.json({
+            message:"User updated succesfylly",
+            data:result
+        })
+
+
+    }
+    catch(err){
+        res.json({
+            message:"Failed to update user",
+            error : err
+        })
+    }
 }
 // Create read update delete operations (CRUD);
 // arrow function
 
-// get a user with the help of uid
-app.get("/user/:uid" , getById);
 // update a user with the help of uid
 app.patch("/user/:uid" , updateUser);
-// delete a user with the help if uid
-app.delete("/user/:uid" , deleteUser);
+
 
 
 app.listen(3000 , () => {
