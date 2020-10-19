@@ -243,39 +243,36 @@ app.patch("/user/:uid", updateUser);
 /// REQUESTS START FROM HERE
 
 // send request
-function addInFollowingTable(obj){
-    return new Promise((resolve , reject)=>{
-        let sql; 
-        if(obj.isPublic){
-            sql = `INSERT INTO user_following(uid , follow_id, is_accepted) VALUES ("${obj.uid}" , "${obj.followId}" , "1") ;`;
-        }
-        else{
-            sql = `INSERT INTO user_following(uid , follow_id ) VALUES ("${obj.uid}" , "${obj.followId}");`;
-        }
-        console.log(sql);
-        connection.query(sql , function(error , data){
-            if(error){
-                reject(error);
-            }
-            else{
-                resolve(data);
-            }
-        })
-    })
+function addInFollowingTable(obj) {
+  return new Promise((resolve, reject) => {
+    let sql;
+    if (obj.isPublic) {
+      sql = `INSERT INTO user_following(uid , follow_id, is_accepted) VALUES ("${obj.uid}" , "${obj.followId}" , "1") ;`;
+    } else {
+      sql = `INSERT INTO user_following(uid , follow_id ) VALUES ("${obj.uid}" , "${obj.followId}");`;
+    }
+    console.log(sql);
+    connection.query(sql, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
 }
-function addInFollowerTable(follower_id , uid){
-    return new Promise( (resolve , reject)=>{
-        let sql = `INSERT INTO user_follower(uid , follower_id) VALUES ("${uid}" , "${follower_id}");`;
-        console.log(sql);
-        connection.query(sql , function(error , data){
-            if(error){
-                reject(error);
-            }
-            else{
-                resolve(data);
-            }
-        })
-    })
+function addInFollowerTable(follower_id, uid) {
+  return new Promise((resolve, reject) => {
+    let sql = `INSERT INTO user_follower(uid , follower_id) VALUES ("${uid}" , "${follower_id}");`;
+    console.log(sql);
+    connection.query(sql, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
 }
 const sendRequest = async (req, res) => {
   try {
@@ -291,11 +288,11 @@ const sendRequest = async (req, res) => {
         followId: follow_id,
       });
       // addInFollowerTable
-      let followerResult = await addInFollowerTable(uid , follow_id);
+      let followerResult = await addInFollowerTable(uid, follow_id);
       res.json({
-          message:"request sent and accepted !",
-          data : {followingResult , followerResult}
-      })
+        message: "request sent and accepted !",
+        data: { followingResult, followerResult },
+      });
     } else {
       // addInFollowingTable with is_accepted false
       let followingResult = await addInFollowingTable({
@@ -304,22 +301,92 @@ const sendRequest = async (req, res) => {
         followId: follow_id,
       });
       res.json({
-          message:"Request sent and it is pending !",
-          data : followingResult
-      })
+        message: "Request sent and it is pending !",
+        data: followingResult,
+      });
     }
   } catch (err) {
-      res.json({
-          message:"Failed to send request",
-          error : err
-      })
+    res.json({
+      message: "Failed to send request",
+      error: err,
+    });
   }
 };
 
 app.post("/user/request", sendRequest);
 
+//accept request
+function acceptFollowRequest(uid, to_be_accepted) {
+  return new Promise((resolve, reject) => {
+    let sql = `UPDATE user_following SET is_accepted = 1 WHERE uid = "${to_be_accepted}" AND follow_id = "${uid}";`;
+    console.log(sql);
+    connection.query(sql, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
+const acceptRequest = async (req, res) => {
+  try {
+    // object destructing
+    let { uid, to_be_accepted } = req.body;
+    let acceptData = await acceptFollowRequest(uid, to_be_accepted);
+    let followerData = await addInFollowerTable(to_be_accepted, uid);
+    res.json({
+      message: "Request accepted !",
+      data: { acceptData, followerData },
+    });
+  } catch (err) {
+    res.json({
+      message: "failed to accept request !",
+      error: err,
+    });
+  }
+};
+app.post("/user/request/accept", acceptRequest);
 
-//
+
+// see pending request
+function getPendingIds(uid){
+
+    return new Promise((resolve ,reject)=>{
+        let sql = `SELECT uid FROM user_following WHERE follow_id = "${uid}" AND is_accepted = 0 ;`;
+        connection.query(sql , function(error ,data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    })
+}
+const pendingRequests = async(req,res)=>{
+    try{
+        let uid  = req.params.uid;
+        let ids = await getPendingIds(uid);
+        console.log(ids);
+        let users  = [];
+        for(let i=0 ; i<ids.length ; i++){
+             let user = await getUserById(ids[i].uid);
+             users.push(user[0]);
+        }
+        res.json({
+            message:"got pending requests !!",
+            data : users
+        })
+    }
+    catch(err){
+        res.json({
+            message:"Failed to get pending requests !",
+            error : err
+        })
+    }
+}
+app.get("/user/request/:uid" , pendingRequests);
 
 
 
