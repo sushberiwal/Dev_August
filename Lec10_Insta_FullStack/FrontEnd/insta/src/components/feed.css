@@ -1,0 +1,17 @@
+.posts{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #FAFAFA;
+}
+
+.feeds{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.user-profile {
+    position: sticky;
+    height: calc(100vh - 50px);
+    top: 50px;
+}

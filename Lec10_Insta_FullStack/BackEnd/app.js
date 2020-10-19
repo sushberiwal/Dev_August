@@ -8,9 +8,6 @@ const fs = require("fs");
 const { v4: uuidv4 } = require('uuid');
 const connection = require("./db/connection");
 
-
-
-
 // server created
 const app = express();
 
@@ -80,7 +77,6 @@ function insertUser(user){
 
     });
 }
-
 const createUser = async (req,res) => {
     try{
         let uid = uuidv4();
@@ -100,9 +96,6 @@ const createUser = async (req,res) => {
     }
 
 }
-
-
-
 // post a user => add a user in userDB
 app.post("/user" , createUser);
 const getAllUsers = (req,res) => {

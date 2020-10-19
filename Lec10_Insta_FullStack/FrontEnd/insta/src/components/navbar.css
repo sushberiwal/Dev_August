@@ -1,0 +1,21 @@
+.navbar {
+    border-bottom: 1px solid lightgray;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    /* margin: 2px; */
+    position: sticky;
+    top: 0px;
+    background: white;
+}
+
+.navbar-logo{
+/* height: 65%; */
+/* background: chartreuse; */
+}
+
+.navbar-logo img{
+height: 100%;
+object-fit: contain;
+}

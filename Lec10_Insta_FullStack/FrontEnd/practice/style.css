@@ -1,0 +1,70 @@
+*{
+    box-sizing: border-box;
+}
+
+.view{
+    display: flex;
+    width: 100vw;
+}
+.viewOne{
+    width: 30%;
+}
+.user-details{
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    align-items: center;
+}
+.user-img{
+    height: 105px;
+}
+.user-img img{
+    height: 100%;
+}
+.user-name{
+
+}
+.user-handle{
+
+}
+.user-bio{
+
+}
+.user-stats{
+    display: flex;
+    justify-content: space-around;
+}
+.count{
+
+}
+.posts-count{
+
+}
+.followers-count{
+
+}
+.following-count{
+
+}
+.posts{
+
+}
+.followers{
+
+}
+.following{
+
+}
+.user-options{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100px;
+    justify-content: center;
+}
+.viewTwo{
+
+}
+.viewThree{
+
+}
