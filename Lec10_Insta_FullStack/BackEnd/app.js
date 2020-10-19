@@ -98,13 +98,56 @@ const createUser = async (req,res) => {
 }
 // post a user => add a user in userDB
 app.post("/user" , createUser);
-const getAllUsers = (req,res) => {
-    console.log(req.body);
-    res.json({
-        message :"Succesfully get all user",
-        data : userDB.length ? userDB : "User DB empty !"
-    })
-} 
+
+
+
+
+
+
+
+
+
+
+function getUsers(){
+    return new Promise(function(resolve , reject){
+        let sql = `SELECT * FROM user_table;`;
+        connection.query(sql , function(error , data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    });
+}
+
+
+const getAllUsers = async (req,res) => {
+    try{
+
+      let users = await getUsers();
+      console.log(users);
+      res.json({
+          message:"Succesfully got all users !",
+          data : users
+      })
+
+    }
+    catch(err){
+        res.json({
+            message : "get all users failed !",
+            error : err
+        })
+    }
+
+}
+// get all user
+app.get("/user" , getAllUsers);
+
+
+
+
 const getById = (req,res) =>{
     let {uid} = req.params;
     // array
@@ -172,15 +215,14 @@ const deleteUser = (req,res)=>{
 }
 // Create read update delete operations (CRUD);
 // arrow function
-// get all user
-app.get("/user" , getAllUsers);
-app.get("/user" , getAllUsers);
+
 // get a user with the help of uid
 app.get("/user/:uid" , getById);
 // update a user with the help of uid
 app.patch("/user/:uid" , updateUser);
 // delete a user with the help if uid
 app.delete("/user/:uid" , deleteUser);
+
 
 app.listen(3000 , () => {
     console.log("Server started at port 3000 ");
