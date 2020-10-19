@@ -7,6 +7,7 @@ const userDB = require("./db/users.json");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const connection = require("./db/connection");
+const { resolveSoa } = require("dns");
 
 // server created
 const app = express();
@@ -213,9 +214,6 @@ function updateById(uid, updateObject) {
     });
   });
 }
-
-// nodejs code => express abstraction
-
 const updateUser = async (req, res) => {
   try {
     let uid = req.params.uid;
@@ -234,11 +232,9 @@ const updateUser = async (req, res) => {
     });
   }
 };
-// Create read update delete operations (CRUD);
-// arrow function
-
 // update a user with the help of uid
 app.patch("/user/:uid", updateUser);
+
 
 /// REQUESTS START FROM HERE
 
@@ -312,7 +308,6 @@ const sendRequest = async (req, res) => {
     });
   }
 };
-
 app.post("/user/request", sendRequest);
 
 //accept request
@@ -389,7 +384,87 @@ const pendingRequests = async(req,res)=>{
 app.get("/user/request/:uid" , pendingRequests);
 
 
+// following // followers
+
+
+function getAllFollowingIds(uid){
+    return new Promise((resolve , reject)=>{
+        let sql = `SELECT follow_id FROM user_following WHERE uid="${uid}" AND is_accepted = 1;`;
+        console.log(sql);
+        connection.query(sql , function(error , data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    })
+}
+const getFollowing = async (req,res) =>{
+try{
+    let uid = req.params.uid;
+    let followIds = await getAllFollowingIds(uid);
+    let followedUsers = [];
+    for(let i=0 ; i<followIds.length ; i++){
+        let user = await getUserById(followIds[i].follow_id);
+        followedUsers.push(user[0]);
+    }
+    res.json({
+        message:"got all following",
+        data : followedUsers
+    })
+
+}
+catch(err){
+    res.json({
+        message:"Failed to get following",
+        error : err
+    })
+}
+}
+app.get("/user/following/:uid", getFollowing);
+
+
+
+function getAllFollowerIds(uid){
+    return new Promise((resolve ,reject) =>{
+        let sql = `SELECT follower_id FROM user_follower WHERE uid = "${uid}";`;
+        connection.query(sql , function(error , data){
+            if(error){
+                reject(error);
+            }
+            else{
+                resolve(data);
+            }
+        })
+    })
+}
+const getFollower = async (req,res) =>{
+    try{
+        let uid = req.params.uid;
+        let followerIds = await getAllFollowerIds(uid);
+        let followerUsers = [];
+        for(let i=0 ; i<followerIds.length ; i++){
+            let user = await getUserById(followerIds[i].follower_id);
+            followerUsers.push(user[0]);
+        }
+        res.json({
+            message:"got all followers",
+            data : followerUsers
+        })
+    
+    }
+    catch(err){
+        res.json({
+            message:"Failed to get following",
+            error : err
+        })
+    }
+}
+app.get("/user/follower/:uid" , getFollower);
 
 app.listen(3000, () => {
   console.log("Server started at port 3000 ");
 });
+// post => create , get by id , get all , update , delete
