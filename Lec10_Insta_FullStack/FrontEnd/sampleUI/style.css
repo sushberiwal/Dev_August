@@ -1,0 +1,93 @@
+*{
+    box-sizing: border-box;
+}
+
+html,body{
+    padding: 0px;
+    margin: 0px;
+}
+
+.container{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.profile{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    /* background: antiquewhite; */
+    height: 500px;
+    justify-content: space-around;
+}
+
+.feed{
+
+}
+
+.profile-info{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-img{
+    display: flex;
+    justify-content: center;
+}
+.profile-img img{
+    height: 130px;
+}
+.post-stats{
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+}
+.post{
+
+}
+.post-count{
+
+}
+.follower{
+
+}
+.follower-count{
+
+}
+.following{
+
+}
+.following-count{
+
+}
+.profile-details{
+    /* background: aquamarine; */
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.follower-tab{
+
+}
+.following-tab{
+
+}
+.request-tab{
+
+}
+.search-user{
+display:flex;
+/* background: brown; */
+width: 500px;
+justify-content: space-around;
+}
+.search{
+    background: turquoise;
+border: 1px solid;
+padding: 10px;
+}
+

@@ -7,7 +7,7 @@ const userDB = require("./db/users.json");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 const connection = require("./db/connection");
-const { resolveSoa } = require("dns");
+const cors = require("cors");
 
 // server created
 const app = express();
@@ -28,7 +28,7 @@ const app = express();
 // });
 
 app.use(express.json());
-
+app.use(cors());
 // app.use(function(req,res,next){
 //     console.log("After express.json");
 //     console.log("Req Body = " , req.body);
