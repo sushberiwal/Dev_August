@@ -4,27 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>React Intro</title>
-    
     <!-- React logic -->
     <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
-    
     <!-- Platform independent -->
     <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
-
     <!-- babel => JSX code compile to JS code -->
     <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
-    <div id="root"></div>
-
+    <div id="root" ></div>
 
     <script type="text/babel"> 
     // components => class based => stateful components and function based => stateless components
-
     let names = ["sheldon" , "penny" , "howard" , "leonard" , "rajesh"];
-
-
-    // stateless funtional component
+    
+    // stateless funtional component => sfc
     function Hello(prop){
         return <h1> Hii i am {prop.name} component </h1>;
     }
