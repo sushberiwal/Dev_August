@@ -9,7 +9,7 @@ class TaskList extends Component {
       { id: 1, task: "Learn ES6" },
       { id: 2, task: "Learn React" },
       { id: 3, task: "Learn javascript" },
-      { id: 4, task: "Learn angular" },
+      { id: 4, task: "Learn angular" }
     ],
   };
 
@@ -18,19 +18,32 @@ class TaskList extends Component {
     let filteredTasks = this.state.tasks.filter((task) => {
       return task.id != id;
     });
-
     this.setState({
       tasks: filteredTasks,
     });
   };
 
+
+  addTask = (task) =>{
+    if(task){
+      let tasks = this.state.tasks; // [  obj , obj , obj , obj    ];
+      let newTask = {id : tasks.length+1 , task:task};
+      let newTasks = [ ...tasks , newTask ];
+      this.setState({
+          tasks : newTasks
+      })
+    }
+  }
+
   render() {
     let tasks = this.state.tasks;
-
+  
     return (
       <React.Fragment>
         {tasks.map((task) => {
-          return <Task key={task.id} task={task} handleDeleteTask = {this.deleteTask} />;
+          return <Task key={task.id} 
+                       task={task} 
+                       handleDeleteTask = {this.deleteTask} />;
         })}
       </React.Fragment>
     );
