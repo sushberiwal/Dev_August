@@ -1,7 +1,6 @@
 // npm install mysql
 
 // To connect app.js to cloud database
-
 const mysql      = require('mysql');
 const connection = mysql.createConnection({
   host     : 'b3xmvrmiseqzgqpznlrf-mysql.services.clever-cloud.com',
