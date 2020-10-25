@@ -1,0 +1,19 @@
+.profile-view{
+    display: flex;
+    flex-direction: column;
+    justify-content:space-around;
+    /* background: chocolate; */
+    height: 800px;
+}
+
+.profile{
+height: 50%;
+}
+
+.stats{
+height: 50%;
+display: flex;
+/* justify-content: space-between; */
+flex-direction: column;
+}
+

@@ -16,4 +16,8 @@ connection.connect();
 console.log("Connected succesfully !!");
 
 
+setInterval(function () {
+  connection.query('SELECT 1');
+}, 5000);
+
 module.exports = connection;
