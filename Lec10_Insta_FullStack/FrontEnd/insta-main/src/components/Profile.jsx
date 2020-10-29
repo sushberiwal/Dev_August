@@ -51,6 +51,8 @@ class Profile extends Component {
       requestCount,
     } = this.state;
 
+    let changeView = this.props.changeViewHandler;
+
     return (
       <div className="profile">
         <div className="profile-details">
@@ -76,10 +78,10 @@ class Profile extends Component {
           </div>
         </div>
         <div className="profile-info">
-          <div className="suggestions">SUGGESTIONS</div>
-          <div className="request">REQUEST  {requestCount}</div>
-          <div className="follower">FOLLOWERS</div>
-          <div className="following">FOLLOWING</div>
+          <div className="suggestions" onClick={ ()=> {changeView("SUGGESTIONS")} }>SUGGESTIONS</div>
+          <div className="request" onClick = { () =>{ changeView("REQUESTS") } } >REQUEST  {requestCount}</div>
+          <div className="follower" onClick = { () =>{ changeView("FOLLOWERS") } }>FOLLOWERS</div>
+          <div className="following" onClick = { () =>{ changeView("FOLLOWING") } }>FOLLOWING</div>
         </div>
       </div>
     );
