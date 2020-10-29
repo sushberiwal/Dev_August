@@ -1,0 +1,32 @@
+.profile{
+    border: 1px solid lightgray;
+    height: 500px;
+    width: 300px;
+    margin-top: 20px;
+}
+
+.profile-details{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-info{
+    margin-top: 20px;
+}
+.profile-info div{
+    border: 1px solid lightgray;
+    /* background: lightgray; */
+    height: 30px;
+    text-align: center;
+}
+
+.profile-stats{
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.count{
+    text-align: center;
+}
