@@ -1,0 +1,16 @@
+.header{
+/* background: black; */
+height: 60px;
+border-bottom: 1px solid lightgray;
+display: flex;
+align-items: center;
+}
+
+.header-image{
+/* background: lightpink; */
+margin-left: 20px;
+}
+
+.header-image img{
+    
+}

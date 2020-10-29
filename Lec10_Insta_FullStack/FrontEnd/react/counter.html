@@ -26,31 +26,42 @@
     class Counter extends React.Component {
 
         constructor(){
+            console.log("inside constructor");
             super();
             this.state = {
-                count : 0
+                name : "this is initial name"
             }
         }
         
-        increment = () =>{
-            // this.state.count = this.state.count+1;
-            this.setState({
-                count : this.state.count+1
-            })
-        }
 
-        decrement = () =>{
-            this.setState({
-                count: this.state.count-1
+        componentDidMount(){
+            // api data yha pe manga lo    
+            setTimeout( () =>{
+                console.log("inside component did mount !!!")
+                this.setState({
+                name : "new name from component did mount !!"
             })
+            } , 5000)
         }
+        
+
+        // increment = () =>{
+        //     // this.state.count = this.state.count+1;
+        //     this.setState({
+        //         count : this.state.count+1
+        //     })
+        // }
+
+        // decrement = () =>{
+        //     this.setState({
+        //         count: this.state.count-1
+        //     })
+        // }
 
         render() {
             return(
                 <React.Fragment> 
-                <p className="m-2">{this.state.count}</p>
-                <div className="btn btn-primary" onClick={this.increment}>+</div>
-                <div className="btn btn-danger" onClick={this.decrement}>-</div>
+                <p className="m-2">{this.state.name}</p>
                 </React.Fragment>
             )}
 }
