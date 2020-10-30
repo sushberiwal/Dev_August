@@ -9,6 +9,29 @@ const { v4: uuidv4 } = require("uuid");
 const connection = require("./db/connection");
 const cors = require("cors");
 // server created
+
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now()+".jpg")
+  }
+})
+function fileFilter (req, file, cb) {
+  let mimetype = file.mimetype;
+  if(mimetype.includes("image")){
+    cb(null, true)
+  }
+  else{
+    cb(new Error('I don\'t have a clue!') , false)
+  }
+}
+
+const upload = multer({ storage : storage , fileFilter : fileFilter })
+
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -23,8 +46,12 @@ function userQueries(action, data) {
       let bio = user.bio;
       let handle = user.handle;
       let phone = user.phone;
-      let isPublic = user.is_public;
-      let sql = `INSERT INTO user_table(uid, name, email, phone, bio, handle , is_public) VALUES ('${uid}','${name}','${email}',${phone},'${bio}','${handle}', '${isPublic}')`;
+      let isPublic = user.isPublic;
+      let imageUrl = user.imageUrl;
+      const date = new Date();
+      let createdAt = date.toISOString().slice(0, 19).replace('T', ' ');
+
+      let sql = `INSERT INTO user_table(uid, name, email, phone, bio, handle , is_public , imageUrl , createdAt) VALUES ('${uid}','${name}','${email}',${phone},'${bio}','${handle}', ${isPublic} , '${imageUrl}' , '${createdAt}' )`;
       connection.query(sql, function (error, results) {
         if (error) {
           reject(error);
@@ -91,6 +118,10 @@ const createUser = async (req, res) => {
     let uid = uuidv4();
     let user = req.body;
     user.uid = uid;
+    console.log(user);
+    let imageUrl = req.file.filename;
+    user.imageUrl = imageUrl;
+    // console.log(req.files);
     let result = await userQueries("createUser", { user: user });
     res.json({
       message: "User created Succesfully !",
@@ -103,7 +134,20 @@ const createUser = async (req, res) => {
     });
   }
 };
-app.post("/user", createUser);
+app.post("/user", upload.single("photo") ,createUser);
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // get all users from user table
 const getAllUsers = async (req, res) => {
@@ -457,6 +501,16 @@ const acceptRequest = async (req , res) =>{
 app.post("/user/request/accept" , acceptRequest);
 
 
+
+app.post("/imageupload" , upload.single('photo') , function(req , res){
+  // console.log("body" , req.body);
+  console.log("file" ,req.file);
+  // console.log("files" ,req.files);
+
+  res.json({
+    message:"file uploaded !"
+  })
+})
 
 
 
