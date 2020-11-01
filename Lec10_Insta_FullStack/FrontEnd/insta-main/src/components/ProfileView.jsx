@@ -60,6 +60,7 @@ class ProfileView extends Component {
           view={this.state.currentView}
           userList={this.state.userList}
         />
+        
       </div>
     );
   }

@@ -56,13 +56,13 @@ class Setting extends Component {
       else{
           this.componentDidMount();
       }
-      
   }
 
   handleSubmit = async (e) =>{
       e.preventDefault();
       let file = this.fileUpload.current.files[0];
       console.log(file);
+      
       let formData = new FormData();  
       formData.append('photo', file);  
       formData.append('name' , this.state.name );
@@ -133,6 +133,8 @@ class Setting extends Component {
                 />
               </div>
             </div>
+
+
             { isDisabled &&  <div className="edit btn btn-warning" onClick ={this.editHandler} > EDIT</div> }
             { !isDisabled && <div className="edit btn btn-warning" onClick ={this.editHandler} >CANCEL CHANGES</div> }
             

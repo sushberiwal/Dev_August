@@ -25,13 +25,15 @@ class Profile extends Component {
       let followerObj =await axios.get("http://localhost:3000/user/follower/80b5f987-6e55-4264-9245-5fd75faa92e7")
       let following = followingObj.data.data;
       let followers = followerObj.data.data;
+      let postData = await axios.get("http://localhost:3000/post/80b5f987-6e55-4264-9245-5fd75faa92e7");
+      let postCount = postData.data.data;
       
       this.setState({
           name : user.name,
           handle : user.handle,
           bio : user.bio,
-          pImage : "profile.png",
-          postCount: 10,
+          pImage : user.pImage,
+          postCount: postCount.length,
           followerCount : followers.length,
           followingCount : following.length,
           requestCount : pendingRequests.length

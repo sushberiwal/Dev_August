@@ -11,7 +11,7 @@ const ProfileList = (props) => {
             {userList.map(  (user) =>{
                 return <div className="user">
                     <div className="user-image">
-                        <img src="profile.png" alt=""/>
+                        <img src={user.pImage} alt=""/>
                     </div>
                     <div className="user-details">
                    <div className="user-name">{user.name}</div>

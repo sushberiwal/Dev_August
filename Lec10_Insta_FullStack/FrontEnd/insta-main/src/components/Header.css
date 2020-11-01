@@ -4,6 +4,10 @@ height: 60px;
 border-bottom: 1px solid lightgray;
 display: flex;
 align-items: center;
+justify-content: space-between;
+position: sticky;
+top: 0px;
+background: white;
 }
 
 .header-image{
@@ -13,4 +17,20 @@ margin-left: 20px;
 
 .header-image img{
     
+}
+
+.header-navlinks{
+/* background: chartreuse; */
+width: 400px;
+}
+
+.header-navlinks-ul{
+list-style: none;
+display: flex;
+justify-content:space-evenly;
+width: 100%;
+}
+
+.header-navlinks-ul li{
+text-decoration: none;
 }

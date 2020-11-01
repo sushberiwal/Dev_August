@@ -1,31 +1,34 @@
 import React from "react";
 import "./App.css";
 import Header from "./components/Header";
-import ProfileView from "./components/ProfileView";
 import {
   BrowserRouter as Router,
   Route,
   Redirect,
-  Switch,
+  Switch
 } from "react-router-dom";
-import Setting from "./Settings";
+import Setting from "./components/Settings";
+import UserView from "./components/UserView";
 
 // jsx => js
 
 function App() {
   return (
+
+
+
     <React.Fragment>
       <Router>
           <Header />
         <Switch>
           <Route path="/" exact>
-            <ProfileView />
+            <UserView />
           </Route>
           <Route path="/settings" exact>
             <Setting />
           </Route>
           <Redirect to="/">
-            <ProfileView />
+            <UserView />
           </Redirect>
         </Switch>
       </Router>
