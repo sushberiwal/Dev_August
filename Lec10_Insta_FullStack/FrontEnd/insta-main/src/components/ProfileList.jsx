@@ -9,7 +9,7 @@ const ProfileList = (props) => {
             <div className="view-name">{view}</div>
 
             {userList.map(  (user) =>{
-                return <div className="user">
+                return <div key = {user.uid} className="user">
                     <div className="user-image">
                         <img src={user.pImage} alt=""/>
                     </div>

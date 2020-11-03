@@ -9,9 +9,9 @@ class ProfileView extends Component {
   state = {
     currentView: "SUGGESTIONS",
     userList: [
-      { id: 1, name: "test name", handle: "test handle 2" },
-      { id: 2, name: "test name", handle: "test handle 2" },
-      { id: 3, name: "test name", handle: "test handle 2" },
+      { id: 1, name: "test name", handle: "test handle 2" ,pImage:"profile.png" },
+      { id: 2, name: "test name", handle: "test handle 2" , pImage:"profile.png" },
+      { id: 3, name: "test name", handle: "test handle 2" , pImage:"profile.png" },
     ],
   };
 
@@ -20,9 +20,9 @@ class ProfileView extends Component {
         this.setState({
               currentView :view,
               userList :  [
-                { id: 1, name: "test name", handle: "test handle 2" },
-                { id: 2, name: "test name", handle: "test handle 2" },
-                { id: 3, name: "test name", handle: "test handle 2" },
+                { id: 1, name: "test name", handle: "test handle 2" , pImage:"profile.png" },
+                { id: 2, name: "test name", handle: "test handle 2" , pImage:"profile.png" },
+                { id: 3, name: "test name", handle: "test handle 2" , pImage:"profile.png" },
               ]
           })
       }

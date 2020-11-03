@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./FeedsView.css";
 import axios from "axios";
 import Post from "./Post";
+import CreatePost from "./CreatePost";
 
 class FeedsView extends Component {
   state = {
@@ -61,7 +62,7 @@ class FeedsView extends Component {
       }
       console.log(users);
 
-      let postss = [];
+      let newPosts = [];
       for(let i=0 ; i<posts.length ; i++){
           let post = {
               pid : posts[i].pid ,
@@ -70,15 +71,18 @@ class FeedsView extends Component {
               pImage : users[i].pImage,
               postImage : posts[i].postImage,
           }
-          postss.push(post);
+          newPosts.push(post);
       }
     //   console.log(userData);
       this.setState({
-          posts : postss
-      })
-    
+          posts : newPosts
+      }) 
   }
 
+
+  updatePosts = () =>{
+      this.componentDidMount();
+  }
 
   render() {
       let{ posts }= this.state;
@@ -87,9 +91,10 @@ class FeedsView extends Component {
         <React.Fragment>
         <div className="feeds-view">
             <h1>FEEDS</h1>
+            <CreatePost updatePosts = {this.updatePosts} />
         <div className="posts">
             {posts.map( (post) =>{
-                return <Post key = {post.pid} post ={ post}/>
+                return <Post key = {post.pid} post ={post} />
             })}
             </div>
         </div>
