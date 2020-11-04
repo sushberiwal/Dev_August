@@ -6,14 +6,9 @@
 * https://www.selenium.dev/documentation/en/
 ## Puppeteer
 * https://pptr.dev/
-
 ## Electron
 * https://www.electronjs.org/docs/tutorial/first-app
-
-
 ## Socket IO
 * https://socket.io/get-started/chat/
-
-
 ## Electron Packaging
 * https://www.christianengvall.se/electron-packager-tutorial/
