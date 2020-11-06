@@ -4,6 +4,7 @@ import './App.css';
 import Home from './components/homepage';
 import Login from './components/login';
 import Navbar from './components/navbar';
+import Profile from './components/profile';
 
 function App() {
   return (  
@@ -18,7 +19,11 @@ function App() {
     <Login />
   </Route>
 
-  <Redirect to="/home"></Redirect>
+  <Route path="/profile" exact>
+    <Profile />
+  </Route>
+
+  {/* <Redirect to="/home"></Redirect> */}
   
   </React.Fragment>
   );
