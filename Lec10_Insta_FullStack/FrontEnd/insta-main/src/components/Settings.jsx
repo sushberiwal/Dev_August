@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap/dist/css/bootstrap.min.css';
 import "./Settings.css";
 
 class Setting extends Component {

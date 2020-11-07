@@ -1,12 +1,9 @@
 import React from "react";
+import { BrowserRouter as Router, Redirect, Route, Switch  } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch
-} from "react-router-dom";
+
+
 import Setting from "./components/Settings";
 import UserView from "./components/UserView";
 
