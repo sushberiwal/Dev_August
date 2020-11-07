@@ -1,17 +1,34 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import "./navbar.css";
+import { Link } from "react-router-dom";
 
-const Navbar = () => {
-  return <div className="navbar">
-      <ul className="navbar-links">
-          <li><NavLink to="/home">Home</NavLink></li>
-          <li><NavLink to="/login">Login</NavLink></li>
-          <li><NavLink to="/profile">Profile</NavLink></li>
-          {/* <li><NavLink to="/logout">Logout</NavLink></li> */}
-      </ul>
-      
-  </div>;
+const Navbar = (props) => {
+  let { isAuth , login , logout } = props;
+  return (
+    <div className="navlinks">
+      {isAuth ? (
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/profile">Profile</Link>
+          </li>
+          <li>
+            <Link to="/settings">Settings</Link>
+          </li>
+          <li>
+            <Link to="/" onClick = {logout}>Logout</Link>
+          </li>
+        </ul>
+      ) : (
+        <ul>
+          <li>
+            <Link to="/" onClick = {login}>Login</Link>
+          </li>
+        </ul>
+      )}
+    </div>
+  );
 };
 
 export default Navbar;

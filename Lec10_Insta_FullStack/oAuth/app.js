@@ -93,11 +93,11 @@ passport.use(
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("home", { user: req.user });
+  // res.render("home", { user: req.user });
 });
 
 app.get("/auth/login", (req, res) => {
-  res.render("login", { user: req.user });
+  // res.render("login", { user: req.user });
 });
 
 app.get(
@@ -115,21 +115,36 @@ const authChecker = (req, res, next) => {
 };
 
 app.get("/profile/", authChecker, (req, res) => {
-  res.render("profile", { user: req.user });
+  // res.render("profile", { user: req.user });
 });
 
 app.get("/auth/callback", passport.authenticate("google"), (req, res) => {
   console.log("inside callback url !");
-  res.redirect("/profile/");
+  res.redirect("http://localhost:3000/home");
   // console.log(req);
   // res.end("Reached callback url !!");
 });
+
+
+app.get("/auth/confirmLogin" ,  (req,res)=>{
+  if(req.user){
+    res.json({
+      isAuth:true
+    })
+  }
+  else{
+    res.json({
+      isAuth:false
+    })
+  }
+})
 
 app.get("/auth/logout", (req, res) => {
   //handle with passport
   //   res.end("logging out !!");
   req.logout();
-  res.redirect("/");
+  res.end();
+  // res.redirect("/");
 });
 
 app.listen(4000, () => {
