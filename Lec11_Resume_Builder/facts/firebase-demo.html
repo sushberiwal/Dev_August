@@ -10,15 +10,30 @@
 
     <div class="header">
         <ul>
-            <li> <a id="signin" href="">Sign In</a>  </li>
-            <li> <a id="signup" href="">Sign Up</a>  </li>
-            <li> <a id="logout" href="">Log Out</a>  </li>
+            <div class="welcome">
+            </div>
+            <li> <a id="signin" class="hide" href="">Sign In</a>  </li>
+            <li> <a id="signup" class="hide" href="">Sign Up</a>  </li>
+            <li> <a id="logout" class="hide" href="">Log Out</a>  </li>
         </ul>
     </div>
+
+
+    <div class="resumes-block hide">
+        <div class="resume red"></div>
+        <div class="resume black"></div>
+        <div class="resume blue"></div>
+    </div>
+
 
     <div class="signup-form form">
         <h2>SignUp Form</h2>
         <form id="signup-form">
+            <div class="name">
+                <label for="name">Name</label>
+                <input type="text" name="name" id="name">
+            </div>
+            
             <div class="email">
                 <label for="email">Email</label>
                 <input type="text" id = "email" name="email">
@@ -33,7 +48,20 @@
 
 
 
-
+    <div class="signin-form form ">
+        <h2>SignIn Form</h2>
+        <form id="signin-form">
+            <div class="email">
+                <label for="email">Email</label>
+                <input type="text" id = "email-si" name="email">
+            </div>
+            <div class="password">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password-si">
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
 <script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>

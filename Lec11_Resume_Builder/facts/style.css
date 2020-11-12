@@ -31,4 +31,37 @@
    height: 200px;
    width: 200px;
    margin-top: 100px;
+   display: none;
 }
+
+
+.active{
+    display: block;
+}
+
+
+
+.resumes-block{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.resumes-block div{
+    height: 150px;
+    width: 150px;
+}
+.red{
+    background: red;
+}
+.black{
+    background: black;
+}
+    .blue{
+        background: blue;
+    }
+    
+
+    .hide{
+        display:none;
+    }
