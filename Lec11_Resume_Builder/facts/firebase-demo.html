@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="header">
+        <ul>
+            <li> <a id="signin" href="">Sign In</a>  </li>
+            <li> <a id="signup" href="">Sign Up</a>  </li>
+            <li> <a id="logout" href="">Log Out</a>  </li>
+        </ul>
+    </div>
+
+    <div class="signup-form form">
+        <h2>SignUp Form</h2>
+        <form id="signup-form">
+            <div class="email">
+                <label for="email">Email</label>
+                <input type="text" id = "email" name="email">
+            </div>
+            <div class="password">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+
+
+
+
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-app.js"></script>
+<!-- authentication functions -->
+<script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-auth.js"></script>
+<!-- db functions -->
+<script src="https://www.gstatic.com/firebasejs/8.0.1/firebase-firestore.js"></script>
+<script src="./firebase.js"></script>
+<script src="./script.js"></script>
+</body>
+</html>
