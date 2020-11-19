@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import About from './components/about';
+import Contact from './components/contact';
 import Header from './components/header';
 import Landing from './components/landingPage';
 import Register from './components/register';
@@ -28,6 +29,10 @@ function App() {
       <Route path="/signin" exact>
         <SignIn></SignIn>
       </Route>
+      <Route path="/contact" exact>
+        <Contact></Contact>
+      </Route>
+
     </Switch>
     </React.Fragment>
   );
