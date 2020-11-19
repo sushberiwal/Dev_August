@@ -25,6 +25,7 @@
 
 .header-links ul li{
     list-style: none;
+    margin:auto;
 
 }
 
@@ -44,6 +45,8 @@
     border: 2px solid #9b59b6 ;
     border-radius: 5px;
     padding: 5px;
+    outline:none;
+    width: 100%;
 }
 
 .btn:hover{

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom';
 import "./contact.css";
 import Preview from './preview';
 
@@ -30,6 +31,15 @@ class Contact extends Component {
         this.setState({
             contact: { ...this.state.contact , [id]:value }
         })
+     }
+
+    
+     onSubmitContactDetails = ()=>{
+         // documentId => collection// db me save hojaega
+         // navigate to /education
+
+         // history object
+         this.props.history.push("/education");
      }
 
 
@@ -85,6 +95,14 @@ class Contact extends Component {
                         <div className="input-group">
                             <label htmlFor="">Pin Code</label>
                             <input type="text" id="pin" value={contact.pin} onChange={ (e) =>{  this.onChangeHandler(e)  }   }/>
+                        </div>
+                        <div className="next full">
+                            <button className="btn" onClick={ this.onSubmitContactDetails }>Next</button>
+                        </div>
+                        <div className="back full">
+                            <Link to="/templates">
+                            <button className="btn">Back</button>
+                            </Link>
                         </div>
                     </div>
                 </div>

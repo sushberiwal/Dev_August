@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import skin1 from "../static/images/skin1.svg";
 import skin2 from "../static/images/skin2.svg";
@@ -17,19 +18,28 @@ const Templates = () => {
       <div className="templates-styles">
         <div className="template">
           <img src={skin1} alt="" />
+          <Link to="/contact">
           <button class="template-btn">USE TEMPLATE</button>
+          </Link>
+          
         </div>
         <div className="template">
           <img src={skin2} alt="" />
+          <Link to="/contact">
           <button class="template-btn">USE TEMPLATE</button>
+          </Link>
         </div>
         <div className="template">
           <img src={skin3} alt="" />
+          <Link to="/contact">
           <button class="template-btn">USE TEMPLATE</button>
+          </Link>
         </div>
         <div className="template">
           <img src={skin4} alt="" />
+          <Link to="/contact">
           <button class="template-btn">USE TEMPLATE</button>
+          </Link>
         </div>
       </div>
     </div>

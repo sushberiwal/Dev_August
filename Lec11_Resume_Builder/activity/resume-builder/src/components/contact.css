@@ -2,6 +2,7 @@
     display:flex;
     justify-content: space-evenly;
     margin-top: 50px;
+    margin-bottom:50px;
 }
 
 
@@ -16,7 +17,6 @@
 
 .preview-form{
     width:35%;
-    background:lightblue;
     box-shadow: 0 2px 9px rgba(186, 186, 186, 0.5);
 }
 
@@ -53,4 +53,13 @@ justify-content: space-around;
 
 .full{
     width:95%
+}
+
+.next{
+    margin-top:10px;
+}
+
+.back{
+    margin-top:10px;
+    margin-bottom: 10px;
 }
