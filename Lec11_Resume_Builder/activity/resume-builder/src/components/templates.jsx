@@ -1,49 +1,70 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { Component } from 'react'
+import { connect } from "react-redux";
+import {skinCodes} from "../Constants/skinCodes";
 
-import skin1 from "../static/images/skin1.svg";
-import skin2 from "../static/images/skin2.svg";
-import skin3 from "../static/images/skin3.svg";
-import skin4 from "../static/images/skin4.svg";
 
 import "./templates.css";
 
-const Templates = () => {
-  return (
-    <div className="templates">
-      <div className="templates-intro">
-        <h1>Select a resume template to get started</h1>
-        <p>You’ll be able to edit and change this template later!</p>
-      </div>
-      <div className="templates-styles">
-        <div className="template">
-          <img src={skin1} alt="" />
-          <Link to="/contact">
-          <button class="template-btn">USE TEMPLATE</button>
-          </Link>
-          
-        </div>
-        <div className="template">
-          <img src={skin2} alt="" />
-          <Link to="/contact">
-          <button class="template-btn">USE TEMPLATE</button>
-          </Link>
-        </div>
-        <div className="template">
-          <img src={skin3} alt="" />
-          <Link to="/contact">
-          <button class="template-btn">USE TEMPLATE</button>
-          </Link>
-        </div>
-        <div className="template">
-          <img src={skin4} alt="" />
-          <Link to="/contact">
-          <button class="template-btn">USE TEMPLATE</button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
 
-export default Templates;
+
+class Templates extends Component {
+  state = { 
+    skinCode : this.props.skinCode
+   }
+
+   handleSkinSelect = (skinCode) =>{
+    //  console.log(skinCode);
+    this.props.changeSkinCode(skinCode);
+    this.props.history.push("/contact");
+   }
+
+   componentDidMount(){
+     console.log("inside mount" , this.props.skinCode);
+   }
+
+   componentWillReceiveProps(newProps){
+     console.log(newProps);
+     this.setState({
+       skinCode : newProps.skinCode
+     })
+
+     
+   }
+
+
+  render() { 
+    let {skinCode} = this.state;
+    return (
+      <div className="templates">
+        <div className="templates-intro">
+          <h1>Select a resume template to get started</h1>
+          <p>You’ll be able to edit and change this template later!</p>
+        </div>
+        <div className="templates-styles">
+      {skinCodes.map(  ( skin ) => {
+        let className = skin.value == skinCode ? "selected-skin" : "";
+        return <div key = {skin.id} className={`template ${className}`} >
+            <img src= {`/images/${skin.value}.svg`} alt="" />
+            <button class="template-btn" onClick = { ()=> {this.handleSkinSelect(skin.value)} }>USE TEMPLATE</button>
+          </div>
+      })}
+        </div>
+      </div>
+    );
+  }
+}
+ 
+
+const mapStateToProps = (state) => {
+  return {
+    skinCode : state.document.skinCode
+  }
+}
+
+const mapDispatchToProps = (dispatch) =>{
+  return{
+    changeSkinCode : (skinCode) => {  dispatch( {type:"CHANGE_SKIN" , skinCode : skinCode} )}
+  }
+}
+
+export default connect(mapStateToProps , mapDispatchToProps )(Templates);

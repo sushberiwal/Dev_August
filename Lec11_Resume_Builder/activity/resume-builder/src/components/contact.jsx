@@ -29,10 +29,22 @@ class Contact extends Component {
          // documentId => collection// db me save hojaega
          // navigate to /education
 
+         this.props.updateContactDetails(this.state.contact);
          // history object
          this.props.history.push("/education");
      }
 
+
+     componentDidMount(){
+         console.log("inside component did mount !!!");
+         console.log(this.props);
+     }
+
+     componentWillReceiveProps(newProps){
+        this.setState({
+            contact : newProps.contactDetails
+        })
+     }
 
     render() { 
         let {contact , education} = this.state;
@@ -115,4 +127,11 @@ const mapStateToProps = (state) =>{
 }
 
 
-export default connect(mapStateToProps)(Contact);
+const mapDispatchToProps = (dispatch) =>{
+    return{
+        updateContactDetails : (contactDetails) => { dispatch( {type:"UPDATE_CONTACT" , contactDetails : contactDetails  }  ) }
+    }
+}
+
+
+export default connect(mapStateToProps , mapDispatchToProps)(Contact);

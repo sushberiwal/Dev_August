@@ -2,7 +2,7 @@ export const initialState = {
     document : {
         docId : "12345",
         uid : "1" ,
-        skinCode : "skin1" ,
+        skinCode : "skin2" ,
     },
     contactDetails : {
         fname:"Sushant",

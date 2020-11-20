@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import About from './components/about';
 import Contact from './components/contact';
 import Education from './components/education';
+import Finalize from './components/finalize';
 import Header from './components/header';
 import Landing from './components/landingPage';
 import Register from './components/register';
@@ -18,9 +19,7 @@ function App() {
       <Route path="/" exact>
         <Landing></Landing>
       </Route>
-      <Route path="/templates" exact>
-        <Templates></Templates>
-      </Route>
+      <Route path="/templates" exact component={Templates}></Route>
       <Route path="/about" exact>
         <About></About>
       </Route>
@@ -31,10 +30,8 @@ function App() {
         <SignIn></SignIn>
       </Route>
       <Route path="/contact" exact component={Contact}></Route>
-      <Route path="/education">
-        <Education></Education>
-      </Route>
-
+      <Route path="/education" exact component={Education}></Route>
+      <Route path="/finalize" exact component={Finalize}></Route>
     </Switch>
     </React.Fragment>
   );

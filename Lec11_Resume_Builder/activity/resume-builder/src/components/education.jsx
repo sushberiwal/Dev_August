@@ -13,7 +13,25 @@ class Education extends Component {
      }
 
      onChangeHandler = (e) =>{
+         e.preventDefault();
+         let key = e.target.id;
+         let value = e.target.value;
 
+         this.setState({
+             education : {...this.state.education , [key]:value}
+         })
+     }
+
+     onSubmitEducationDetails = () =>{
+         // save in redux store 
+         this.props.updateEducationDetails(this.state.education);
+         this.props.history.push("/finalize");
+     }
+
+     componentWillReceiveProps(newProps){
+         this.setState({
+             education : {...newProps.educationDetails}
+         })
      }
 
     render() { 
@@ -54,7 +72,7 @@ class Education extends Component {
                             <input type="text" id="graduationYear" value={education.graduationYear} onChange={ (e) =>{  this.onChangeHandler(e)  }   }/>
                         </div>
                         <div className="next full">
-                            <button className="btn" onClick={ this.onSubmitContactDetails }>Next</button>
+                            <button className="btn" onClick={ this.onSubmitEducationDetails }>Next</button>
                         </div>
                         <div className="back full">
                             <Link to="/contact">
@@ -80,4 +98,10 @@ const mapStateToProps = (state) =>{
     }
 }
 
-export default connect(mapStateToProps)(Education);
+const mapDispatchToProps = (dispatch) =>{
+    return {
+        updateEducationDetails : (educationDetails) => {dispatch( {  type:"UPDATE_EDUCATION" , educationDetails:educationDetails })}
+    }
+}
+
+export default connect(mapStateToProps , mapDispatchToProps)(Education);
