@@ -41,7 +41,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) =>{
     return {
-        addTodos : (todo) => {   dispatch( { type:"ADD_TODOS" , todo:todo })}
+        addTodos : (todo) => {   dispatch( { type:"ADD_TODOS" , todo:todo })},
+        deleteTodo : (id) => {   dispatch({type:"DELETE_TODO" , id:id})  }
     }
 }
 // connect(mapStateToProps) => high order component => 

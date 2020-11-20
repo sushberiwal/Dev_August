@@ -13,7 +13,10 @@ export function myReducer(state = initialState , action){
             ...state ,
             todos:[...state.todos , {id:Math.random , todo:action.todo}]
         }
-    }else{
+    }else if(action.type == "DELETE_TODO"){
+        ////
+    }
+    else{
         return state;
     }
 }
