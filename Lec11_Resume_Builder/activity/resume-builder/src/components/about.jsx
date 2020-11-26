@@ -3,6 +3,10 @@ import "./about.css";
 
 import about from "../static/images/aboutus.jpg";
 
+
+
+
+
 const About = () => {
     return ( 
         <div className="about">
