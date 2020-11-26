@@ -27,8 +27,6 @@ class Templates extends Component {
      this.setState({
        skinCode : newProps.skinCode
      })
-
-     
    }
 
 
@@ -56,6 +54,7 @@ class Templates extends Component {
  
 
 const mapStateToProps = (state) => {
+  console.log("inside templates map state" , state);
   return {
     skinCode : state.document.skinCode
   }

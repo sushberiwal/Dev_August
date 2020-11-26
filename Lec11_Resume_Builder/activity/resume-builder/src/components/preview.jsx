@@ -1,61 +1,34 @@
 import React from "react";
-import Skin1 from "./skin1";
+import { connect } from "react-redux";
+import Skin1 from "./skins/skin1";
+import Skin2 from "./skins/skin2";
+import Skin5 from "./skins/skin5";
+
+
+
 
 const Preview = (props) => {
-  let {
-    fname,
-    lname,
-    summary,
-    email,
-    phone,
-    profession,
-    street,
-    city,
-    state,
-    country,
-    pin,
-  } = props.contact;
 
-  let {
-    cgpa,
-    city: educationCity,
-    state: educationState,
-    degree,
-    collegeName,
-    graduationMonth,
-    graduationYear,
-  } = props.education;
+  console.log("inside preview" , props);
 
+  let skinCode = props.skinCode;
   return (
     <React.Fragment>
-      <div className="contact-details">
-        Contact Details
-        <div className="fname">{fname}</div>
-        <div className="lname">{lname}</div>
-        <div className="summary">{summary}</div>
-        <div className="email">{email}</div>
-        <div className="phone">{phone}</div>
-        <div className="profession">{profession}</div>
-        <div className="street">{street}</div>
-        <div className="city">{city}</div>
-        <div className="state">{state}</div>
-        <div className="country">{country}</div>
-        <div className="pin">{pin}</div>
-      </div>
-      <div className="education-details">
-        Education Details
-        <div className="cgpa">{cgpa}</div>
-        <div className="city">{educationCity}</div>
-        <div className="state">{educationState}</div>
-        <div className="degree">{degree}</div>
-        <div className="college">{collegeName}</div>
-        <div className="graduationMonth">{graduationMonth}</div>
-        <div className="graduationYear">{graduationYear}</div>
-      </div>
-
-      {/* <Skin1 ></Skin1> */}
+      {skinCode == "skin1" && <Skin1 contact={props.contact} education={props.education}></Skin1>}
+      {skinCode == "skin2" && <Skin2 contact={props.contact} education={props.education}></Skin2>}
+      {skinCode == "skin3" && <Skin5 contact={props.contact} education={props.education}></Skin5>}
+      {skinCode == "skin4" && <Skin5 contact={props.contact} education={props.education}></Skin5>}
+      {skinCode == "skin5" && <Skin5 contact={props.contact} education={props.education}></Skin5>}
     </React.Fragment>
   );
 };
 
-export default Preview;
+const mapStateToProps = (state) =>{
+  console.log("inside map of preview" , state)
+  return {
+    skinCode : state.document.skinCode
+  }
+}
+
+
+export default connect(mapStateToProps)(Preview);

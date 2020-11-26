@@ -6,7 +6,8 @@ import Preview from './preview';
 
 
 class Contact extends Component {
-   
+
+    
     state = { 
         contact:this.props.contactDetails,
         education:this.props.educationDetails
@@ -14,6 +15,7 @@ class Contact extends Component {
 
 
      onChangeHandler = (e)=>{
+        
         e.preventDefault(); 
         // console.log(e.target);
         let id = e.target.id;
