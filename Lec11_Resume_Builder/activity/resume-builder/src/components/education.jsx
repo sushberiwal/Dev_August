@@ -3,6 +3,7 @@ import Preview from './preview';
 import "./education.css";
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { updateEducation } from '../actions/educationActions';
 
 
 
@@ -100,7 +101,7 @@ const mapStateToProps = (state) =>{
 
 const mapDispatchToProps = (dispatch) =>{
     return {
-        updateEducationDetails : (educationDetails) => {dispatch( {  type:"UPDATE_EDUCATION" , educationDetails:educationDetails })}
+        updateEducationDetails : (educationDetails) => {dispatch(updateEducation(educationDetails))}
     }
 }
 

@@ -1,8 +1,14 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase'
 import { Link } from 'react-router-dom';
+import { compose } from 'redux';
+import { updateContact } from '../actions/contactActions';
 import "./contact.css";
 import Preview from './preview';
+
+
+
 
 
 class Contact extends Component {
@@ -122,6 +128,7 @@ class Contact extends Component {
  
 
 const mapStateToProps = (state) =>{
+    console.log(state);
     return {
         contactDetails : state.contactDetails,
         educationDetails : state.educationDetails
@@ -131,9 +138,9 @@ const mapStateToProps = (state) =>{
 
 const mapDispatchToProps = (dispatch) =>{
     return{
-        updateContactDetails : (contactDetails) => { dispatch( {type:"UPDATE_CONTACT" , contactDetails : contactDetails  }  ) }
+        updateContactDetails : (contactDetails) => { dispatch( updateContact(contactDetails) ) }
     }
 }
 
 
-export default connect(mapStateToProps , mapDispatchToProps)(Contact);
+export default compose(connect(mapStateToProps , mapDispatchToProps),  firestoreConnect([ { collection : "resumes" }]))(Contact);

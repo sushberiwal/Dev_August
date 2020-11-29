@@ -1,0 +1,14 @@
+.signin-form{
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.25);
+    width: 70%;
+    margin: auto;
+    height: 350px;
+}
+
+.signin-heading{
+    text-align: center;
+}
+.signin-form-details{
+    display: flex;
+    flex-wrap: wrap;
+}
