@@ -3,7 +3,6 @@ import { initialState } from "../reducers/initialState";
 
 
 export const login = (userDetails)=>{
-
     return (dispatch , getState , {getFirebase , getFirestore}) =>{
         // async tasks
         let guid;
@@ -16,7 +15,7 @@ export const login = (userDetails)=>{
             guid = obj.user.uid;
             guser = obj.user;
             // check if resume document is already present
-            return Promise.all([ db.collection("users").doc(guid).get()  , db.collection('resumes').doc(guid).get() ])
+            return Promise.all([ db.collection("users").doc(guid).get(),db.collection('resumes').doc(guid).get() ])
         })
         .then(( combineUsersAndResumes  )=>{
             let userDoc = combineUsersAndResumes[0];
@@ -63,8 +62,6 @@ export const logout = () =>{
 }
 
 export const signup = (userDetails)=>{
-
-
     return (dispatch , getState , {getFirebase , getFirestore}) =>{
         console.log(userDetails);
         let firebase = getFirebase();

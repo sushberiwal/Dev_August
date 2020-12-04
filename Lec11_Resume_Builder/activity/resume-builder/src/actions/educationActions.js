@@ -1,6 +1,7 @@
 export const updateEducation = (educationDetails)=>{
 
     return (dispatch , getState)=>{
+        
         // async calls
 
 

@@ -6,6 +6,7 @@ import resume from '../static/images/resume.png';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { firestoreConnect } from 'react-redux-firebase';
+import { updateState } from '../actions/updateActions';
 
 
 
@@ -20,7 +21,8 @@ class Landing extends Component {
         console.log(data);
 
         // dispatch ????
-        
+        this.props.updateState(data);
+        this.props.history.push("/templates");
     }
 
 
@@ -30,7 +32,9 @@ class Landing extends Component {
             <h1>Create a resume that stands out</h1>
             <p>Create a Resume that perfectally describes your skils and match job profile.</p>
             <div>
-                    <button className="btn" onClick={this.getStartedHandler}>Get Started For Free</button>
+                  {this.props.firebaseAuth.uid ? 
+                  <button className="btn" onClick={this.getStartedHandler}>Get Started For Free</button>:
+                  <span>Loading......</span>}  
             </div>
             <div className="logo">
                 <img src={resume} alt=""/>
@@ -49,5 +53,10 @@ const mapStateToProps = (state)=>{
 }
 
 
+const mapDispatchToProps = (dispatch)=>{
+    return{
+     updateState : (state) => { dispatch( updateState(state) )} 
+    }
+}
 
-export default compose(connect(mapStateToProps) ,firestoreConnect([{collection:"resumes"}]))(Landing);
+export default compose(connect(mapStateToProps , mapDispatchToProps) ,firestoreConnect([{collection:"resumes"}]))(Landing);
