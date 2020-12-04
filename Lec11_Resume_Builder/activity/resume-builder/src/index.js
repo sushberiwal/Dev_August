@@ -18,9 +18,9 @@ const store = createStore(
   myReducer,
   compose(
     applyMiddleware(thunk.withExtraArgument({getFirebase , getFirestore})),
-    window.devToolsExtension ? window.devToolsExtension() : (f) => f,
     reactReduxFirebase(firebaseApp),
-    reduxFirestore(firebaseApp)
+    reduxFirestore(firebaseApp),
+    window.devToolsExtension ? window.devToolsExtension() : (f) => f,
   )
 );
 

@@ -22,7 +22,7 @@ const Header = (props) => {
             <Link to="/"><img src="https://www.pepcoding.com/images/logo.png" alt=""/></Link>
             </div>
             <div className="header-links">
-                {auth ? 
+                {auth.uid ? 
                 <ul>
                 <li><Link to="/templates">Resume Templates</Link></li>
                 <li><Link to="/about">About Us</Link></li>
@@ -41,7 +41,7 @@ const Header = (props) => {
 
 const mapStateToProps = (state) =>{
     return {
-        auth : state.auth.isAuth
+        auth : state.firebase.auth
     }
 }
 
