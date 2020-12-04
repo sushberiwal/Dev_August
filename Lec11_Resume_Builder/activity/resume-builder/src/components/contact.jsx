@@ -8,20 +8,14 @@ import "./contact.css";
 import Preview from './preview';
 
 
-
-
-
-class Contact extends Component {
-
-    
+class Contact extends Component {    
+       
     state = { 
-        contact:this.props.contactDetails,
-        education:this.props.educationDetails
-     }
-
+            contact:this.props.contactDetails,
+            education:this.props.educationDetails
+         }
 
      onChangeHandler = (e)=>{
-        
         e.preventDefault(); 
         // console.log(e.target);
         let id = e.target.id;

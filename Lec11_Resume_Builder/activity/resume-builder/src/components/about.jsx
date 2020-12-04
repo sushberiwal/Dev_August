@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import "./about.css";
 
 import about from "../static/images/aboutus.jpg";
@@ -8,6 +8,8 @@ import about from "../static/images/aboutus.jpg";
 
 
 const About = () => {
+
+    
     return ( 
         <div className="about">
             <div className="left-about">

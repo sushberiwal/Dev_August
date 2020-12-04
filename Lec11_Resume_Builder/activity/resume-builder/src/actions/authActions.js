@@ -6,12 +6,33 @@ export const login = (userDetails)=>{
 
     return (dispatch , getState , {getFirebase , getFirestore}) =>{
         // async tasks
-
+        let guid;
+        let guser;
         // id , pw => db => user => login // login failed
         let firebase = getFirebase(); // auth functions getFirebase;
-
+        let db = getFirestore(); // db functions 
+        
         firebase.auth().signInWithEmailAndPassword(userDetails.email ,userDetails.password).then( obj =>{
-            console.log(obj.user);
+            guid = obj.user.uid;
+            guser = obj.user;
+            // check if resume document is already present
+            return Promise.all([ db.collection("users").doc(guid).get()  , db.collection('resumes').doc(guid).get() ])
+        })
+        .then(( combineUsersAndResumes  )=>{
+            let userDoc = combineUsersAndResumes[0];
+            let doc = combineUsersAndResumes[1];
+            // console.log(userDoc.data());
+            if(!userDoc.data()){
+                db.collection("users").doc(guid).set({
+                    email:guser.email
+                })
+            }
+            if(!doc.data()){
+                // create a template
+                db.collection("resumes").doc(guid).set(initialState)
+            }
+        })
+        .then(()=>{
             dispatch({ type:"LOGIN"  , userDetails : userDetails });
         })
         .catch( err =>{
