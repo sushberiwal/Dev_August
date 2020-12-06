@@ -1,16 +1,21 @@
 // let blockList = [ {site:"www.youtube.com" , time:"10"} , {site:"www.facebook.com" , time:"6"}  ];
 let blockList = [];
 
+
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if(request.type == "add"){
         blockList.push({site:request.site , time:"10"});
+        sendResponse(true);
     }
     else if(request.type == "delete"){
         blockList = blockList.filter( function(siteObj){
             return siteObj.site != request.site;
         });
+        sendResponse(true);
+    }else{
+        sendResponse(blockList);
     }
-    sendResponse(true); 
 });
 
 
@@ -26,8 +31,10 @@ async function polling(){
         let tabUrl = tab.url;
         for(let i=0 ; i<blockList.length ; i++){
             if(tabUrl.includes( blockList[i].site )){
+                chrome.browserAction.setBadgeText({text: blockList[i].time+""});
                 blockList[i].time--;
                 if(blockList[i].time <= 0){
+                    chrome.browserAction.setBadgeText({text: blockList[i].time+""});
                     await deleteActiveTab(tab.id);
                 }
             }
