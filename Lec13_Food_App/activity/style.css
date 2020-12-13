@@ -5,9 +5,12 @@
     font-family: 'Lato', sans-serif;
 }
 
+#changing-text{
+    color:#F63854
+}
 
 .showcase{
-    background-image:linear-gradient(rgba(8, 8, 8, 0.596) , rgb(0,0,0,1)) ,url("./pexels-trang-doan-1092730.jpg");
+    background-image:linear-gradient(rgba(41, 41, 41, 0.596) , rgb(0, 0, 0)) ,url("./pexels-trang-doan-1092730.jpg");
     height: 100vh;
     background-size: 100vw;   
 }
