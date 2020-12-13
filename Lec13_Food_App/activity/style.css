@@ -1,0 +1,69 @@
+*{
+    box-sizing: border-box;
+    margin:0px;
+    padding:0px;
+    font-family: 'Lato', sans-serif;
+}
+
+
+.showcase{
+    background-image:linear-gradient(rgba(8, 8, 8, 0.596) , rgb(0,0,0,1)) ,url("./pexels-trang-doan-1092730.jpg");
+    height: 100vh;
+    background-size: 100vw;   
+}
+
+.showcase-content{
+    position:absolute;
+    top: 30%;
+    left: 15%;
+}
+
+.showcase-content h1{
+    color:white;
+    font-size: 400%;
+}
+
+.showcase-buttons{
+    margin-top: 20px;
+    display: flex;
+    width: 300px;
+    height: 50px;
+    /* background: mediumblue; */
+    justify-content: space-evenly;
+}
+.btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F63854;
+    color: white;
+    height: 50px;
+    border-radius: 30px;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.btn-fade{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:1px solid #F63854;
+    color: #F63854;
+    height: 50px;
+    border-radius: 30px;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.btn-fade:hover{
+    transform: scale(1.2);
+    background: #F63854;
+    color:white;
+    
+}
+
+.btn:hover{
+    transform: scale(1.2);
+}

@@ -22,7 +22,6 @@ io.on("connection", function (socket) {
                break;
            }
        }
-
     socket.broadcast.emit("receive-msg", {name : name , message : msg});
   });
 
