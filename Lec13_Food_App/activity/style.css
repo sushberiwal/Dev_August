@@ -12,7 +12,8 @@
 .showcase{
     background-image:linear-gradient(rgba(41, 41, 41, 0.596) , rgb(0, 0, 0)) ,url("./pexels-trang-doan-1092730.jpg");
     height: 100vh;
-    background-size: 100vw;   
+    background-size: 100vw; 
+    background-attachment: fixed;  
 }
 
 .showcase-content{
@@ -34,6 +35,31 @@
     /* background: mediumblue; */
     justify-content: space-evenly;
 }
+
+.navlinks{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.showcase-ul{
+    display: flex;
+    list-style: none;
+    width: 50%;
+    justify-content: space-around;
+    margin-top: 5px;
+}
+
+.showcase-li a:hover{
+    color:#F63854;
+}
+
+.showcase-li a{
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}
+
+
 .btn{
     display: flex;
     align-items: center;

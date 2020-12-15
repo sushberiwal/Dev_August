@@ -1,4 +1,4 @@
-let names = ["EVERYONE" , "DEVELOPERS" , "FITNESS FREAKS" , "VEGANS"];
+let names = ["EVERYONE" , "DEVELOPERS" , "FITNESS FREAKS" , "VEGANS"];            
 
 let changingText = document.querySelector("#changing-text");
 let idx = 0;
