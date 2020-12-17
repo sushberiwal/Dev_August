@@ -1,7 +1,7 @@
 const plans = require("../Model/plansModel.json")
 const {v4 : uuidv4} = require("uuid");
 let fs = require("fs");
-
+let path = require("path");
 
 function getAllPlans(req, res) {
   if (plans.length) {
@@ -20,7 +20,10 @@ function createPlan(req, res) {
   plan.id = uuidv4();
   plans.push(plan);
 
-  fs.writeFileSync("../Model/plansModel.json", JSON.stringify(plans));
+  let plansPath = path.join(__dirname, '..', 'Model', 'plansModel.json');
+  console.log(plansPath);
+  
+  fs.writeFileSync(plansPath , JSON.stringify(plans));
 
   res.status(201).json({
     message: "Successfully create a plan !",
