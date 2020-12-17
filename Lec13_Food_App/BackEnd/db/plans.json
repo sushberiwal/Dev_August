@@ -1,9 +1,0 @@
-[
-  { "id": 3, "plan": "non vegan", "food": "new food" },
-  { "id": 4, "plan": "vegan", "food": "Salad" },
-  {
-    "plan": "Non Vegan",
-    "food": "chicken",
-    "id": "b586dcd5-071c-42b1-9d33-33b769a4501a"
-  }
-]
