@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-
+const dbUrl = require("../secrets/secrets");
 
 mongoose
   .connect(
-    "mongodb+srv://admin:admin@cluster0.ygusz.mongodb.net/food?retryWrites=true&w=majority",
+    dbUrl,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then((db) => {

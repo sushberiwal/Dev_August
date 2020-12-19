@@ -20,69 +20,77 @@ async function createPlan(req, res) {
       error : error.errors.discount.message
     })
   }
+}
+async function getAllPlans(req, res) {
+  try{
+    let plans = await planModel.find({});
+    res.status(200).json({
+      message:"Got all plans successfully !!",
+      data : plans
+    })
+  }
+  catch(error){
+    res.status(501).json({
+      message:"Failed to get all plan",
+      error : error
+    })
+  }
+}
+async function getPlanById(req, res) {
+  try{
+    let { id } = req.params;
+    let plan = await planModel.findById(id);
+    res.status(200).json({
+      message: "Succesfully get plan by id",
+      data: plan,
+    });
+  }
+  catch(error){
+    res.status(404).json({
+      message: "Plan Not found !!!",
+      error:error
+    });
+
+  }
+}
+async function updatePlanById(req, res) {
+  try{
+    let { id } = req.params;
+    let updateObj = req.body;
+    let updatedPlan = await planModel.findByIdAndUpdate(id , updateObj , {new:true} );
+    res.status(200).json({
+      message:"updated plan successfully !!",
+      data : updatedPlan
+    })
+  }
+  catch(error){
+    res.status(501).json({
+      message:"failed to update plan",
+      error
+    })
+  }
+  
+  
+}
+async function deletePlanById(req, res) {
+  try{
+    let { id } = req.params;
+    let deletedPlan = await planModel.findByIdAndDelete(id);
+    res.status(200).json({
+      message:"Plan deleted !!",
+      data : deletedPlan
+    })
+  }
+  catch(error){
+    res.status(501).json({
+      message:"Plan failed to delete !!",
+      error
+    })
+  }
   
 }
 
-function getAllPlans(req, res) {
 
-
-
-}
-function getPlanById(req, res) {
-  let { id } = req.params;
-
-  let filteredPlans = plans.filter(function (plan) {
-    return plan.id == id;
-  });
-  if (filteredPlans.length) {
-    res.status(200).json({
-      message: "Succesfully get plan by id",
-      data: filteredPlans[0],
-    });
-  } else {
-    res.status(404).json({
-      message: "Plan Not found !!!",
-    });
-  }
-}
-function updatePlanById(req, res) {
-  let { id } = req.params;
-  let updateObj = req.body;
-  // { "plan":"", "food":"" }
-  let filteredPlan = plans.filter(function (plan) {
-    return plan.id == id;
-  });
-  if (filteredPlan.length) {
-    let plan = filteredPlan[0];
-    for (key in updateObj) {
-      plan[key] = updateObj[key];
-    }
-    fs.writeFileSync("../Model/plansModel.json", JSON.stringify(plans));
-    res.status(200).json({
-      message: "Plan Updated !!!",
-    });
-  } else {
-    res.status(404).json({
-      message: "Plan Not found !!!",
-    });
-  }
-}
-function deletePlanById(req, res) {
-  let { id } = req.params;
-  let filteredPlans = plans.filter(function (plan) {
-    return plan.id != id;
-  });
-  if (filteredPlans.length == plans.length) {
-    res.status(404).json({
-      message: "Plan not found !!",
-    });
-  } else {
-    fs.writeFileSync("../Model/plansModel.json", JSON.stringify(filteredPlans));
-    res.status(200).json({
-      message: "Plan deleted Successfully !!!",
-    });
-  }
-}
 
 module.exports.getAllPlans = getAllPlans;
 module.exports.createPlan = createPlan;

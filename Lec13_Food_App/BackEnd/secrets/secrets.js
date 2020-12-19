@@ -1,0 +1,1 @@
+module.exports = "mongodb+srv://admin:admin@cluster0.ygusz.mongodb.net/food?retryWrites=true&w=majority"

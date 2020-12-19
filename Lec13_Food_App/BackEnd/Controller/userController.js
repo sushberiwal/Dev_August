@@ -1,6 +1,6 @@
-const userDB = require("../Model/usersModel.json");
-const {v4 : uuidv4} = require("uuid");
-const fs = require("fs");
+// const userDB = require("../Model/usersModel.json");
+const userModel = require("../Model/usersModel");
+
 
 function getAllUsers(req, res) {
   if (userDB.length) {
