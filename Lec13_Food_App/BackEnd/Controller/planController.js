@@ -1,34 +1,32 @@
-const plans = require("../Model/plansModel.json")
-const {v4 : uuidv4} = require("uuid");
-let fs = require("fs");
-let path = require("path");
+// const plans = require("../Model/plansModel.json")
+// const {v4 : uuidv4} = require("uuid");
+// let fs = require("fs");
+// let path = require("path");
+const planModel = require("../Model/plansModel");
+
+
+async function createPlan(req, res) {
+  try{
+    let sentPlan = req.body;
+    let plan = await planModel.create(sentPlan);
+    res.status(200).json({
+      message:"Plan Created Succesfully",
+      data :plan
+    })
+  }
+  catch(error){
+    res.status(501).json({
+      message:"Failed to create a plan",
+      error : error.errors.discount.message
+    })
+  }
+  
+}
 
 function getAllPlans(req, res) {
-  if (plans.length) {
-    res.status(200).json({
-      message: "Succesfully got all plans",
-      data: plans,
-    });
-  } else {
-    res.status(200).json({
-      message: "No Food Plans Found ",
-    });
-  }
-}
-function createPlan(req, res) {
-  let plan = req.body;
-  plan.id = uuidv4();
-  plans.push(plan);
 
-  let plansPath = path.join(__dirname, '..', 'Model', 'plansModel.json');
-  console.log(plansPath);
-  
-  fs.writeFileSync(plansPath , JSON.stringify(plans));
 
-  res.status(201).json({
-    message: "Successfully create a plan !",
-    data: plans,
-  });
+
 }
 function getPlanById(req, res) {
   let { id } = req.params;
