@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
-const dbUrl = require("../secrets/secrets");
+const { DB_LINK } = require("../config/secrets");
+
 
 mongoose
   .connect(
-    dbUrl,
+    DB_LINK,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then((db) => {
@@ -35,6 +36,7 @@ let planSchema = new mongoose.Schema({
     }
   }
 })
+
 const planModel = mongoose.model("planscollection" , planSchema);
 
 module.exports = planModel;

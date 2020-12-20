@@ -1,9 +1,11 @@
 const mongoose = require("mongoose");
-const dbUrl = require("../secrets/secrets");
+const { DB_LINK } = require("../config/secrets");
+
+
 
 mongoose
   .connect(
-    dbUrl,
+    DB_LINK,
     { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then((db) => {
@@ -44,7 +46,7 @@ let userSchema = new mongoose.Schema({
 
 
 // it will run before create is called on userModel
-userSchema.pre("create" , function(){
+userSchema.pre("save" , function(){
   this.confirmPassword = undefined;
 })
 

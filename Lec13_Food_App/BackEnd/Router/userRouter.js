@@ -1,6 +1,9 @@
 const express = require("express");
 const userRouter = express.Router();
 
+
+const { signup, login } = require("../Controller/authController");
+
 const {
   getAllUsers,
   createUser,
@@ -19,5 +22,8 @@ userRouter
   .get(getUserById)
   .patch(updateUserById)
   .delete(deleteUserById);
+
+userRouter.post("/signup" , signup );
+userRouter.post("/login" , login );
 
 module.exports = userRouter;
