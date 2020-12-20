@@ -53,10 +53,12 @@ async function getPlanById(req, res) {
 
   }
 }
+
+
 async function updatePlanById(req, res) {
   try{
-    let { id } = req.params;
-    let updateObj = req.body;
+    let id = req.params.id ;
+    let {updateObj} = req.body;
     // let updatedPlan = await planModel.findByIdAndUpdate(id , updateObj , {new:true} );
     let plan = await planModel.findById(id);
     console.log(plan);
@@ -64,9 +66,8 @@ async function updatePlanById(req, res) {
     for(key in updateObj){
       plan[key] = updateObj[key];
     }
-
-    // create // save
     
+    // create // save    
     let updatedPlan = await plan.save();
     // console.log(updatedPlan);
     res.status(200).json({

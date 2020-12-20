@@ -1,4 +1,5 @@
 const express = require("express");
+const { protectRoute , isAuthorized } = require("../Controller/authController");
 
 const planRouter = express.Router();
 
@@ -12,13 +13,15 @@ const {
 
 planRouter
 .route("")
-.get(getAllPlans)
+.get( protectRoute , getAllPlans)
 .post(createPlan);
 
 planRouter
   .route("/:id")
-  .get(getPlanById)
-  .patch(updatePlanById)
-  .delete(deletePlanById);
+  .get( protectRoute , getPlanById)
+  .patch( protectRoute , isAuthorized , updatePlanById)
+  .delete( protectRoute, isAuthorized , deletePlanById);
 
 module.exports = planRouter;
+
+// req.id = id

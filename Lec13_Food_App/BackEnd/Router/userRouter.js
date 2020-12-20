@@ -2,7 +2,7 @@ const express = require("express");
 const userRouter = express.Router();
 
 
-const { signup, login } = require("../Controller/authController");
+const { signup, login, protectRoute } = require("../Controller/authController");
 
 const {
   getAllUsers,
@@ -12,18 +12,18 @@ const {
   deleteUserById,
 } = require("../Controller/userController");
 
-userRouter
-.route("")
-.get(getAllUsers)
-.post(createUser);
+// userRouter
+// .route("")
+// .get(getAllUsers)
+// .post(createUser);
 
 userRouter
-  .route("/:id")
-  .get(getUserById)
-  .patch(updateUserById)
-  .delete(deleteUserById);
+  .route("")
+  .get( protectRoute , getUserById)
+  .patch( protectRoute , updateUserById)
+  .delete( protectRoute , deleteUserById);
 
 userRouter.post("/signup" , signup );
-userRouter.post("/login" , login );
+userRouter.post("/login" , login);
 
 module.exports = userRouter;

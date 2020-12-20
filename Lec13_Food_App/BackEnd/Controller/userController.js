@@ -25,59 +25,70 @@ function createUser(req, res) {
     data: userDB,
   });
 }
-function getUserById(req, res) {
-  let { id } = req.params;
-
-  let filteredUsers = userDB.filter(function (user) {
-    return user.id == id;
-  });
-  if (filteredUsers.length) {
+async function getUserById(req, res) {
+  try{
+    let id = req.id;
+    // get user 
+    let user = await userModel.findById(id);
+    console.log(user);
     res.status(200).json({
-      message: "Succesfully get user by id",
-      data: filteredUsers[0],
-    });
-  } else {
-    res.status(404).json({
-      message: "User Not found !!!",
-    });
+      message:"Got user By id !!",
+      data : user
+    })
+  }
+  catch(error){
+    res.json({
+      message:"Failed to get user !!!",
+      error
+    })
   }
 }
-function updateUserById(req, res) {
-  let { id } = req.params;
-  let updateObj = req.body;
-  // { "plan":"", "food":"" }
-  let filteredUser = userDB.filter(function (user) {
-    return user.id == id;
-  });
-  if (filteredUser.length) {
-    let user = filteredUser[0];
-    for (key in updateObj) {
+async function updateUserById(req, res) {
+  try{
+    let id = req.id;
+    let updateObj = req.body.updateObj;
+    let user = await userModel.findById(id);
+
+    for(key in updateObj){
       user[key] = updateObj[key];
     }
-    fs.writeFileSync("../Model/usersModel.json", JSON.stringify(userDB));
-    res.status(200).json({
-      message: "User Updated !!!",
-    });
-  } else {
-    res.status(404).json({
-      message: "User Not found !!!",
-    });
+
+    let updatedUser = await user.save();
+    res.status(201).json({
+      message:"Updated User",
+      data : updatedUser
+    })
+
+  }
+  catch(error){
+    res.status(501).json({
+      message:"Failed to update user",
+      error
+    })
   }
 }
-function deleteUserById(req, res) {
-  let { id } = req.params;
-  let filteredUsers = userDB.filter(function (user) {
-    return user.id != id;
-  });
-  if (filteredUsers.length == userDB.length) {
-    res.status(404).json({
-      message: "User not found !!",
-    });
-  } else {
-    fs.writeFileSync("../Model/usersModel.json", JSON.stringify(filteredUsers));
-    res.status(200).json({
-      message: "User deleted Successfully !!!",
-    });
+
+async function deleteUserById(req, res) {
+  try{
+    let id = req.id;
+    let deletedUser =await userModel.findByIdAndDelete(id);
+    if(deletedUser){
+      res.status(200).json({
+        message:"User deleted Succesfulyy !!",
+        data : deletedUser
+      })
+    }
+    else{
+      res.status(200).json({
+        message:"User not Found !!!"
+      })
+    }
+  }
+  catch(error){
+    res.status(501).json({
+      message:"Failed to delete",
+      error
+    })
   }
 }
 
