@@ -1,5 +1,6 @@
 const userModel = require("../Model/usersModel");
 
+
 async function signup(req, res) {
   try {
       let user = req.body;

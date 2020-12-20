@@ -3,41 +3,43 @@ const fs = require("fs");
 const plans = require("./db/plans.json");
 const userDB = require("./db/users.json");
 const { v4: uuidv4 } = require("uuid");
-
+const userModel = require("../../BackEnd/Model/usersModel");
+const jwt = require("jsonwebtoken");
 const app = express();
 
-const mongoose = require("mongoose");
 
+
+
+
+
+// const mongoose = require("mongoose");
 // promise based function => pending promise denge mongoose ke functions
-mongoose
-  .connect(
-    "mongodb+srv://admin:admin@cluster0.ygusz.mongodb.net/test?retryWrites=true&w=majority",
-    { useNewUrlParser: true, useUnifiedTopology: true }
-  )
-  .then((db) => {
-    console.log(db);
-  });
-
+// mongoose
+//   .connect(
+//     "mongodb+srv://admin:admin@cluster0.ygusz.mongodb.net/food?retryWrites=true&w=majority",
+//     { useNewUrlParser: true, useUnifiedTopology: true }
+//   )
+//   .then((db) => {
+//     console.log(db);
+//   });
 //schema
-let planSchema = new mongoose.Schema({
-  name:String,
-  price:Number
-});
+// let planSchema = new mongoose.Schema({
+//   name:String,
+//   price:Number
+// });
+// // schema will compile into a collection
+// const planModel = mongoose.model("plancollection" , planSchema);
 
-
-// schema will compile into a collection
-const planModel = mongoose.model("plancollection" , planSchema);
-
-planModel.create({
-  name:"Non vegan",
-  price:50 ,
-  discout:10
-}).then( (plan)=>{
-console.log(plan);
-})
-.catch(  (error)=>{
-  console.log(error);
-})
+// planModel.create({
+//   name:"Non vegan",
+//   price:50 ,
+//   discout:10
+// }).then( (plan)=>{
+// console.log(plan);
+// })
+// .catch(  (error)=>{
+//   console.log(error);
+// })
 
 
 // database => collections => documents
@@ -54,6 +56,36 @@ console.log(plan);
 
 // it tracks incoming request and see if there is data in the request => the data will be fed in req.body
 app.use(express.json());
+
+
+
+
+app.post("/tokenCreator" ,async function(req , res){
+  try{
+    // let {email , password} = req.body;
+    // response => token bhi bhejdo
+                            // payload          // secret key
+    const token = jwt.sign( {id:"12123132",name:"sushant"} , "absjfbajsfbajbsh" );
+    console.log(token);
+    res.json({
+      token
+    })
+  }
+  catch(error){
+    res.json({
+      message:"Failed to create token !!!"
+    })
+  }
+})
+
+app.post("/tokenVerify" , function(req , res){
+  const {token} = req.body;
+  console.log(token);
+  const payload = jwt.verify(token ,"absjfbajsfbajbsh");
+  console.log(payload);
+})
+
+
 
 // app.use(function(req , res , next){
 //   console.log("I am called after express.json");
