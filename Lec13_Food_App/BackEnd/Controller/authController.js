@@ -105,7 +105,79 @@ async function isAuthorized(req , res , next){
   }
 }
 
+
+async function forgetPassword(req , res){
+try{
+  // email nikal do
+  let {email} = req.body;
+  console.log(email);
+  let user = await userModel.findOne({email:email});
+  console.log(user);
+  if(user){
+    // pwToken
+    // timeset
+    let token = user.createResetToken();
+    console.log(token);
+    await user.save({validateBeforeSave:false});
+    // console.log(updatedUser);
+    let resetLink = `http://localhost:3000/api/user/resetpassword/${token}`;
+    res.json({
+      message:"Reset Link is sent to email",
+      resetLink,
+    })
+  }
+  else{
+    res.status(404).json({
+      message:"User Not Found ! Please Sign up first !"
+    })
+  }
+}
+catch(error){
+  res.status(501).json({
+    message:"Failed to forget Password",
+    error
+  })
+}
+
+
+}
+
+
+async function resetPassword(req , res){
+  try{
+    const token = req.params.token;
+    const {password , confirmPassword} = req.body;
+    const user = await userModel.findOne({
+      pwToken:token,
+      tokenTime:{  $gt : Date.now() }
+    })
+    console.log(user);
+    console.log(password , confirmPassword);
+    if(user){
+      user.resetPasswordHandler(password , confirmPassword);
+      await user.save();
+      res.status(200).json({
+        message:"Password Reset Succesfull !!!"
+      })
+    }
+    else{
+      res.status(200).json({
+        message:"Password Reset Link Expired !!!"
+      })
+    }
+  }
+  catch(error){
+    res.status(404).json({
+      message:"Failed to reset password",
+      error
+    })
+  }
+}
+
+
 module.exports.signup = signup;
 module.exports.login = login;
 module.exports.protectRoute = protectRoute;
 module.exports.isAuthorized = isAuthorized;
+module.exports.forgetPassword = forgetPassword;
+module.exports.resetPassword = resetPassword;
