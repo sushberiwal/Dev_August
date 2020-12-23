@@ -57,15 +57,16 @@ async function login(req, res) {
   }
 }
 
+
+
 async function protectRoute(req, res, next) {
   try {
-      const {token} = req.body;
+      const token = req.headers.authorization.split(" ").pop();
+      console.log(token);
       console.log("Inside protectRoute function");
-    //   console.log(token);
       const payload = jwt.verify(token , SECRET_KEY);
       console.log(payload);
       if(payload){
-          // id is stuffed into req.id
           req.id = payload.id;
           next();
       }

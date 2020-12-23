@@ -12,18 +12,19 @@ const {
   deleteUserById,
 } = require("../Controller/userController");
 
+userRouter.post("/signup" , signup );
+userRouter.post("/login" , login);
+
 // userRouter
 // .route("")
-// .get(getAllUsers)
-// .post(createUser);
+// .get(getAllUsers);
 
+// localhost:3000/api/users => get request
 userRouter
   .route("")
   .get( protectRoute , getUserById)
   .patch( protectRoute , updateUserById)
   .delete( protectRoute , deleteUserById);
 
-userRouter.post("/signup" , signup );
-userRouter.post("/login" , login);
 
 module.exports = userRouter;
