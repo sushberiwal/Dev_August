@@ -2,9 +2,15 @@
 
 function getDemoPage(req , res){
     // send demo page to client
-    res.render("demo.pug");
+    // res.render("demo.pug" , {title:"Demo Page" , content:"I am coming from object"});
+    res.render("base.pug");
 }
 
 
+function getHomePage(req , res){
+    res.render("homepage.pug");
+}
+
 module.exports.getDemoPage = getDemoPage;
+module.exports.getHomePage = getHomePage;
 
