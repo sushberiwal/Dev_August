@@ -1,0 +1,110 @@
+*{
+    box-sizing: border-box;
+    margin:0px;
+    padding:0px;
+    font-family: 'Lato', sans-serif;
+}
+
+#changing-text{
+    color:#F63854
+}
+
+.showcase{
+    background-image:linear-gradient(rgba(41, 41, 41, 0.596) , rgb(0, 0, 0)) ,url("../images/pexels-trang-doan-1092730.jpg");
+    height: 100vh;
+    background-size: 100vw; 
+    background-attachment: fixed;  
+}
+
+.showcase-content{
+    position:absolute;
+    top: 30%;
+    left: 15%;
+}
+
+.showcase-content h1{
+    color:white;
+    font-size: 400%;
+}
+
+.showcase-buttons{
+    margin-top: 20px;
+    display: flex;
+    width: 300px;
+    height: 50px;
+    /* background: mediumblue; */
+    justify-content: space-evenly;
+}
+
+.navlinks{
+    display: flex;
+    justify-content: flex-end;
+    height: 50px;
+    align-items: center;
+}
+
+.showcase-ul{
+    display: flex;
+    list-style: none;
+    width: 50%;
+    justify-content: space-around;
+}
+
+.showcase-li a:hover{
+    color:#F63854;
+}
+
+.showcase-li a{
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+}
+
+
+.btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F63854;
+    color: white;
+    height: 50px;
+    border-radius: 30px;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.btn-fade{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border:1px solid #F63854;
+    color: #F63854;
+    height: 50px;
+    border-radius: 30px;
+    padding: 8px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.btn-fade:hover{
+    transform: scale(1.2);
+    background: #F63854;
+    color:white;
+    
+}
+
+.btn:hover{
+    transform: scale(1.2);
+}
+
+.fixed{
+    background: white;
+    position: fixed;
+    width: 100%;
+    z-index: 2;
+}
+
+.fixed a{
+    color:#F63854;
+}
