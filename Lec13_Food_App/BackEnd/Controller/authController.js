@@ -40,17 +40,17 @@ async function login(req, res) {
           token,
         });
       } else {
-        res.status(501).json({
+        res.status(200).json({
           message: "Email and Password didn't Matched !!",
         });
       }
     } else {
-      res.status(501).json({
+      res.status(200).json({
         message: "No User Found SignUp First",
       });
     }
   } catch (error) {
-    res.status(501).json({
+    res.status(200).json({
       message: "Login Failed !!",
       error,
     });

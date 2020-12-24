@@ -4,7 +4,105 @@
     padding:0px;
     font-family: 'Lato', sans-serif;
 }
-
+section {
+    padding: 4rem 5rem;
+  }
+  .container-parent {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    /* align-items: center; */
+    /* width:100%; */
+  }
+  .container {
+    margin-bottom: 3rem;
+    padding: 2rem 1.5rem;
+    margin-right: 1.5rem;
+    box-shadow: 0 10px 22px 10px rgba(27, 38, 49, 0.1);
+    width:30%;
+    transition: transform 0.4s;
+  }
+  .container:hover {
+    transform: scale(1.05);
+  }
+  h2 {
+    font-size: 225%;
+    text-align: center;
+    /* font-weight: 300; */
+    text-transform: uppercase;
+  }
+  .heading-para {
+    font-size: 130%;
+    padding: 0 8rem;
+    margin-bottom: 2rem;
+  }
+  h2::after {
+    content: "";
+    color: #f63854;
+    display: block;
+    border-bottom: solid;
+    margin: 2rem 31rem;
+    margin-bottom: 3rem;
+  }
+  h3 {
+    /* font-weight: 300; */
+    font-size: 125%;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  .feature-para {
+    line-height: 145%;
+  }
+  .How-to {
+    background-color:  rgb(244, 244, 244);
+   }
+   .howto-container {
+     display: flex;
+   }
+   .iphone-img {
+     width: 17%;
+     margin: 0 11%;
+   }
+   
+   .step-container {
+     position: relative;
+     top: 3rem;
+     left: 2rem;
+     /* z-index: -1rem; */
+   }
+   .step-container div {
+     color: #f63854;
+     height: 4rem;
+     width: 4rem;
+     border-color: #f63854;
+     text-align: center;
+     padding-top: 0.7rem;
+     border-radius: 50%;
+     border-style: solid;
+     font-size: 180%;
+     margin-bottom: 2rem;
+     margin-right: 1rem;
+   }
+   /* .step-container:first-child {
+     margin-top: 3rem;
+     border: 1px solid red;
+   } */
+   .howto-para {
+     position: relative;
+     top: 1rem;
+     left: 1rem;
+     /* margin-top: 1.5rem; */
+   }
+   
+   .step-val {
+     float: left;
+   }
+   .clear-fix::after {
+     content: "";
+     clear: both;
+     display: table;
+   }
+   
 #changing-text{
     color:#F63854
 }
@@ -56,22 +154,22 @@
 
 .showcase-li a{
     text-decoration: none;
-    color: white;
+    color: black;
     font-size: 20px;
 }
 
 
 .btn{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #F63854;
-    color: white;
-    height: 50px;
-    border-radius: 30px;
-    padding: 8px;
-    cursor: pointer;
-    transition: transform 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F63854;
+  color: white;
+  height: 50px;
+  border-radius: 30px;
+  cursor: pointer;
+  width: 120px;
+  transition: transform 0.3s;
 }
 
 .btn-fade{
@@ -109,9 +207,47 @@
     color:#F63854;
 }
 
+
+form {
+  width: 70%;
+    height: calc(100vh - 170px);
+    margin: auto;
+    border: 1px solid lightgray;
+}
+.entry{
+  margin-bottom:3%;
+}
+.entry-text {
+  width: 100%;
+  margin-bottom: 1rem;
+  font-size: 110%;
+}
+
+input[type="email"],
+input[type="password"]{
+  /* border: 2px solid grey; */
+  background-color: rgb(241, 237, 237);
+  border: none;
+  outline: none;
+  border-radius: 3%;
+  width: 95%;
+  padding: 3%;
+  margin-bottom: 3%;
+}
+
+.btn-parent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+
 footer {
-    background-color: rgb(58, 56, 56);
-    height: 11rem;
+  background-color: rgb(58, 56, 56);
+  height: 120px;
   }
   .social-link {
     display: flex;
