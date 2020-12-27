@@ -1,6 +1,32 @@
 const userModel = require("../Model/usersModel");
 const jwt = require("jsonwebtoken");
-const { SECRET_KEY } = require("../config/secrets");
+const { SECRET_KEY , GMAIL_ID , GMAIL_PW } = require("../config/secrets");
+const nodemailer = require("nodemailer");
+// const smtpTransport = require("nodemailer-smtp-transport");
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0;
+
+async function sendEmail(message) {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: "smtp.gmail.com",
+      auth: {
+        user: GMAIL_ID ,
+        pass: GMAIL_PW,
+      },
+    });
+
+    let res = await transporter.sendMail({
+      from: message.from, // sender address
+      to: message.to, // list of receivers
+      subject: message.subject, // Subject line
+      text: message.text, // plain text body
+    });
+    return res;
+  } catch (error) {
+    return error;
+  }
+}
 
 async function signup(req, res) {
   try {
@@ -34,13 +60,13 @@ async function login(req, res) {
       if (user.password == password) {
         // token ban na chahie
         const token = jwt.sign({ id: user["_id"] }, SECRET_KEY);
-        
-        res.cookie('jwt',token, { httpOnly: true });
+
+        res.cookie("jwt", token, { httpOnly: true });
         res.status(200).json({
           message: "Logged in succesfully !!",
           data: loggedInUser[0],
         });
-        // res.redirect("/");  
+        // res.redirect("/");
       } else {
         // res.render("login.pug" , {message:"Email and Password didn't Matched !!"});
         res.status(200).json({
@@ -62,154 +88,146 @@ async function login(req, res) {
   }
 }
 
-async function logout(req , res){
-  try{
+async function logout(req, res) {
+  try {
     res.clearCookie("jwt");
     res.redirect("/");
-  }
-  catch(error){
+  } catch (error) {
     res.status(501).json({
-      error
-    })
+      error,
+    });
   }
 }
 
-async function isLoggedIn(req , res , next){
-  try{
+async function isLoggedIn(req, res, next) {
+  try {
     let token = req.cookies.jwt;
-    const payload = jwt.verify(token , SECRET_KEY);
-    if(payload){
+    const payload = jwt.verify(token, SECRET_KEY);
+    if (payload) {
       // logged in hai
       let user = await userModel.findById(payload.id);
       req.name = user.name;
       next();
-    }
-    else{
+    } else {
       //logged in nhi hai
       next();
     }
-  }
-  catch(error){
+  } catch (error) {
     next();
   }
 }
 
 async function protectRoute(req, res, next) {
   try {
-      // const token = req.headers.authorization.split(" ").pop();
-      // console.log(token);
-      const token = req.cookies.jwt;
-      console.log("Inside protectRoute function");
-      const payload = jwt.verify(token , SECRET_KEY);
-      console.log(payload);
-      if(payload){
-          req.id = payload.id;
-          next();
-      }
-      else{
-          res.status(501).json({
-              message:"Please Log in !!"
-          })
-      }
+    // const token = req.headers.authorization.split(" ").pop();
+    // console.log(token);
+    const token = req.cookies.jwt;
+    console.log("Inside protectRoute function");
+    const payload = jwt.verify(token, SECRET_KEY);
+    console.log(payload);
+    if (payload) {
+      req.id = payload.id;
+      next();
+    } else {
+      res.status(501).json({
+        message: "Please Log in !!",
+      });
+    }
   } catch (error) {
     res.status(501).json({
-        message:"Please Log in !!",
-        error
-    })
+      message: "Please Log in !!",
+      error,
+    });
   }
 }
 
-
-async function isAuthorized(req , res , next){
-  try{
+async function isAuthorized(req, res, next) {
+  try {
     let id = req.id;
     let user = await userModel.findById(id);
     console.log(user);
-    if(user.role == "admin"){
+    if (user.role == "admin") {
       next();
-    }else{
+    } else {
       res.status(200).json({
-        message:"You dont have admin rights !!!"
-      })
+        message: "You dont have admin rights !!!",
+      });
     }
-  }
-  catch(error){
+  } catch (error) {
     res.status(501).json({
-      message:"Failed to Authorize",
-      error
-    })
+      message: "Failed to Authorize",
+      error,
+    });
   }
 }
 
-
-async function forgetPassword(req , res){
-try{
-  // email nikal do
-  let {email} = req.body;
-  console.log(email);
-  let user = await userModel.findOne({email:email});
-  console.log(user);
-  if(user){
-    // pwToken
-    // timeset
-    let token = user.createResetToken();
-    console.log(token);
-    await user.save({validateBeforeSave:false});
-    // console.log(updatedUser);
-    let resetLink = `http://localhost:3000/api/user/resetpassword/${token}`;
-    res.json({
-      message:"Reset Link is sent to email",
-      resetLink,
-    })
-  }
-  else{
-    res.status(404).json({
-      message:"User Not Found ! Please Sign up first !"
-    })
-  }
-}
-catch(error){
-  res.status(501).json({
-    message:"Failed to forget Password",
-    error
-  })
-}
-
-
-}
-
-
-async function resetPassword(req , res){
-  try{
-    const token = req.params.token;
-    const {password , confirmPassword} = req.body;
-    const user = await userModel.findOne({
-      pwToken:token,
-      tokenTime:{  $gt : Date.now() }
-    })
+async function forgetPassword(req, res) {
+  try {
+    // email nikal do
+    let { email } = req.body;
+    console.log(email);
+    let user = await userModel.findOne({ email: email });
     console.log(user);
-    console.log(password , confirmPassword);
-    if(user){
-      user.resetPasswordHandler(password , confirmPassword);
+    if (user) {
+      // pwToken
+      // timeset
+      let token = user.createResetToken();
+      console.log(token);
+      await user.save({ validateBeforeSave: false });
+      // console.log(updatedUser);
+      let resetLink = `http://localhost:3000/resetpassword/${token}`;
+      let message = {
+        from:"sushantberiwal@gmail.com",
+        to:email,
+        subject:"Reset Password",
+        text:resetLink
+      }
+      let response = await sendEmail(message);
+      res.json({
+        message:"Reset Link is sent to email",
+        response
+      })
+    } else {
+      res.status(404).json({
+        message: "User Not Found ! Please Sign up first !",
+      });
+    }
+  } catch (error) {
+    res.status(200).json({
+      message: "Failed to forget Password",
+      error,
+    });
+  }
+}
+
+async function resetPassword(req, res) {
+  try {
+    const token = req.params.token;
+    const { password, confirmPassword } = req.body;
+    const user = await userModel.findOne({
+      pwToken: token,
+      tokenTime: { $gt: Date.now() },
+    });
+    console.log(user);
+    console.log(password, confirmPassword);
+    if (user) {
+      user.resetPasswordHandler(password, confirmPassword);
       await user.save();
       res.status(200).json({
-        message:"Password Reset Succesfull !!!"
-      })
-    }
-    else{
+        message: "Password Reset Succesfull !!!",
+      });
+    } else {
       res.status(200).json({
-        message:"Password Reset Link Expired !!!"
-      })
+        message: "Password Reset Link Expired !!!",
+      });
     }
-  }
-  catch(error){
+  } catch (error) {
     res.status(404).json({
-      message:"Failed to reset password",
-      error
-    })
+      message: "Failed to reset password",
+      error,
+    });
   }
 }
-
 
 module.exports.signup = signup;
 module.exports.login = login;

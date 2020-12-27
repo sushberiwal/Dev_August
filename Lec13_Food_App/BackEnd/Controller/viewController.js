@@ -7,8 +7,19 @@ const planModel = require("../Model/plansModel");
 //   res.render("base.pug");
 // }
 
-function getHomePage(req, res) {
-  res.render("homepage.pug" , {name:req.name});
+async function getHomePage(req, res) {
+  try{
+    let plans = await planModel.find(); 
+    plans = plans.splice(0 , 3);
+    res.render("homepage.pug" , {name:req.name , plans});
+  }
+  catch(error){
+    console.log(error);
+  }
+}
+
+function getResetPasswordPage(req , res){
+  res.render("resetPassword.pug" , {name:req.name});
 }
 
 function getLoginPage(req, res) {
@@ -34,3 +45,4 @@ module.exports.getHomePage = getHomePage;
 module.exports.getLoginPage = getLoginPage;
 module.exports.getSignUpPage = getSignUpPage;
 module.exports.getPlansPage = getPlansPage;
+module.exports.getResetPasswordPage = getResetPasswordPage;

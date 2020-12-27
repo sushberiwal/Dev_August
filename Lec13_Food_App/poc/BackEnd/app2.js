@@ -1,38 +1,61 @@
 const express = require("express");
 const app = express();
 const nodemailer = require("nodemailer");
+const smtpTransport = require("nodemailer-smtp-transport");
 
-async function sendEmail() {
-  try {
-    // object =>  info
-    const transporter = nodemailer.createTransport({
-      host: "smtp.mailtrap.io",
-      port: 2525,
-      auth: {
-        user: "de9fc4c3abfe01",
-        pass: "0ec043382adc38",
-      },
-    });
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 
-    await transporter.sendMail({
-      from: "sushant.beriwal@pepcoding.com", // sender address
-      to: "abcd@test.com", // list of receivers
-      subject: "Hello", // Subject line
-      text: "Hello I am testing node mailer !!", // plain text body
-      html: "<b>Hello I am testing this stuff !!!</b>", // html body
-    });
-  } catch (error) {
-    return error;
-  }
-}
+// function sendEmail() {
+//     // object =>  info
+//     const transporter = nodemailer.createTransport(smtpTransport({
+//       service:"gmail",
+//       host: "smtp.gmail.com",
+//       auth: {
+//         user: "sushantberiwal@gmail.com",
+//         pass: "csuhnjrwxrdtpbct",
+//       },
+//     }));
 
-sendEmail()
-  .then(function () {
-    console.log("Email Sent !!!");
-  })
-  .catch(function (error) {
-    console.log("Email not sent !!!!");
-  });
+//     transporter.sendMail({
+//       from: "sushantberiwal@gmail.com", // sender address
+//       to: "tyagiakash926@gmail.com", // list of receivers
+//       subject: "Hello", // Subject line
+//       text: "Hello I am testing node mailer !!", // plain text body
+//       html: "<b>Hello I am testing this stuff !!!</b>", // html body
+//     }).then(data =>{
+//       console.log(data);
+//     }).catch(err =>{
+//       console.log(err);
+//     })
+
+// }
+// sendEmail();
+
+// var transporter = nodemailer.createTransport(
+//   smtpTransport({
+//     service: "gmail",
+//     host: "smtp.gmail.com",
+//     auth: {
+//       user: "sushantberiwal@gmail.com",
+//       pass: "csuhnjrwxrdtpbct",
+//     },
+//   })
+// );
+
+// var mailOptions = {
+//   from: "sushantberiwal@gmail.com", // sender address
+//   to: "sushant.beriwal@pepcoding.com", // list of receivers
+//   subject: "Sending Email using Node.js[nodemailer]",
+//   text: "That was easy!",
+// };
+
+// transporter.sendMail(mailOptions, function (error, info) {
+//   if (error) {
+//     console.log(error);
+//   } else {
+//     console.log("Email sent: " + info.response);
+//   }
+// });
 
 // use wala method hmesha chalta hai
 // app.use(   )
