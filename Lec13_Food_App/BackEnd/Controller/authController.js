@@ -34,11 +34,13 @@ async function login(req, res) {
       if (user.password == password) {
         // token ban na chahie
         const token = jwt.sign({ id: user["_id"] }, SECRET_KEY);
+        
+        res.cookie('jwt',token, { httpOnly: true });
         res.status(200).json({
           message: "Logged in succesfully !!",
           data: loggedInUser[0],
-          token,
         });
+        // res.redirect("/");  
       } else {
         res.status(200).json({
           message: "Email and Password didn't Matched !!",
@@ -57,12 +59,43 @@ async function login(req, res) {
   }
 }
 
+async function logout(req , res){
+  try{
+    res.clearCookie("jwt");
+    res.redirect("/");
+  }
+  catch(error){
+    res.status(501).json({
+      error
+    })
+  }
+}
 
+async function isLoggedIn(req , res , next){
+  try{
+    let token = req.cookies.jwt;
+    const payload = jwt.verify(token , SECRET_KEY);
+    if(payload){
+      // logged in hai
+      let user = await userModel.findById(payload.id);
+      req.name = user.name;
+      next();
+    }
+    else{
+      //logged in nhi hai
+      next();
+    }
+  }
+  catch(error){
+    next();
+  }
+}
 
 async function protectRoute(req, res, next) {
   try {
-      const token = req.headers.authorization.split(" ").pop();
-      console.log(token);
+      // const token = req.headers.authorization.split(" ").pop();
+      // console.log(token);
+      const token = req.cookies.jwt;
       console.log("Inside protectRoute function");
       const payload = jwt.verify(token , SECRET_KEY);
       console.log(payload);
@@ -177,7 +210,9 @@ async function resetPassword(req , res){
 
 module.exports.signup = signup;
 module.exports.login = login;
+module.exports.logout = logout;
 module.exports.protectRoute = protectRoute;
 module.exports.isAuthorized = isAuthorized;
 module.exports.forgetPassword = forgetPassword;
 module.exports.resetPassword = resetPassword;
+module.exports.isLoggedIn = isLoggedIn;

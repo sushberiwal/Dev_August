@@ -4,8 +4,11 @@ const userRouter = require("./Router/userRouter");
 const viewRouter = require("./Router/viewRouter");
 const app = express();
 const path = require("path");
+const cookieParser = require("cookie-parser"); 
 // it tracks incoming request and see if there is data in the request => the data will be fed in req.body
 app.use( express.json());
+app.use(cookieParser());
+
 
 app.use(express.static("public"));
 // app.httpMethod( appRoute , cb function( request , response))

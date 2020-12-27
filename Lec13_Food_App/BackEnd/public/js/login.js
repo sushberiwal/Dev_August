@@ -9,6 +9,7 @@ loginBtn.addEventListener("click" , async function(e){
         if(email.value && pw.value){
             let obj = await axios.post( "http://localhost:3000/api/user/login" , {email:email.value , password:pw.value});
             console.log(obj);
+            window.location.href = "/";
         }
     }
     catch(error){
