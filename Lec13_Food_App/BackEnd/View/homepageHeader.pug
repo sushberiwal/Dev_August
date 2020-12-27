@@ -9,7 +9,8 @@
         li.showcase-li
             a(href='/plans') PLANS
         if name
-            li.showcase-li #{name}
+            li.showcase-li
+                a(href="/profile") #{name}
             li.showcase-li
                 a(href='/logout') LOGOUT         
         else

@@ -42,6 +42,7 @@ async function login(req, res) {
         });
         // res.redirect("/");  
       } else {
+        // res.render("login.pug" , {message:"Email and Password didn't Matched !!"});
         res.status(200).json({
           message: "Email and Password didn't Matched !!",
         });
@@ -50,12 +51,14 @@ async function login(req, res) {
       res.status(200).json({
         message: "No User Found SignUp First",
       });
+      // res.render("login.pug" , {message:"No User Found SignUp First"});
     }
   } catch (error) {
     res.status(200).json({
       message: "Login Failed !!",
       error,
     });
+    // res.render("login.pug" , {message:error});
   }
 }
 
