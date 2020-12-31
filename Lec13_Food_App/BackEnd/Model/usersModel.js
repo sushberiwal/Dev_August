@@ -42,6 +42,10 @@ let userSchema = new mongoose.Schema({
     enum:["admin" , "user" , "restaurant owner" , "delivery boy"],
     default:"user"
   },
+  pImage:{
+    type:String,
+    default:"/images/users/default.png"
+  },
   pwToken:String,
   tokenTime:String
 })

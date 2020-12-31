@@ -1,0 +1,8 @@
+extends base.pug  
+block content
+ h1 #{user.name}
+ p #{user.email}
+ img(src=user.pImage)
+ input(type="file" name="user" id="profileImage")
+block scripts
+ script(src="./js/profileImage.js")

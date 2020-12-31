@@ -107,6 +107,7 @@ async function isLoggedIn(req, res, next) {
       // logged in hai
       let user = await userModel.findById(payload.id);
       req.name = user.name;
+      req.user = user;
       next();
     } else {
       //logged in nhi hai
