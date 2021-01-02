@@ -2,6 +2,7 @@ const express = require("express");
 const planRouter = require("./Router/planRouter");
 const userRouter = require("./Router/userRouter");
 const viewRouter = require("./Router/viewRouter");
+const bookingRouter = require("./Router/bookingRouter");
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser"); 
@@ -19,7 +20,7 @@ app.set("view engine" , "pug");
 // view path set
 app.set("views" , path.join(__dirname,"View"));
 
-
+app.use("/api/booking" , bookingRouter);
 app.use("/api/plans" , planRouter);
 app.use("/api/user" , userRouter);
 app.use("" , viewRouter);
